@@ -3495,6 +3495,8 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
+											"left": -176,
+											"top": -352,
 											"height": 13
 										},
 										{
@@ -3505,11 +3507,11 @@
 											},
 											"font": "Arial;13;1",
 											"parentStyle": true,
-											"left": 645,
-											"top": 638,
-											"width": 60.99169921875,
+											"left": 557,
+											"top": 462,
+											"width": 151,
 											"height": 13,
-											"text": "Package2"
+											"text": "negocio"
 										},
 										{
 											"_type": "LabelView",
@@ -3520,6 +3522,8 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
+											"left": -176,
+											"top": -352,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -3533,15 +3537,17 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
+											"left": -176,
+											"top": -352,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 640,
-									"top": 631,
-									"width": 70.99169921875,
+									"left": 552,
+									"top": 455,
+									"width": 161,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVWO/ggKgueto="
@@ -3560,10 +3566,10 @@
 							"font": "Arial;13;0",
 							"parentStyle": false,
 							"containerChangeable": true,
-							"left": 640,
-							"top": 616,
-							"width": 69.99169921875,
-							"height": 40,
+							"left": 552,
+							"top": 440,
+							"width": 160,
+							"height": 80,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVWO/ggKgt7Yg="
 							}
@@ -5368,9 +5374,9 @@
 											"parentStyle": true,
 											"left": 241,
 											"top": 519,
-											"width": 88.40087890625,
+											"width": 124.55078125,
 											"height": 13,
-											"text": "BazarDominio"
+											"text": "BazarDependencias"
 										},
 										{
 											"_type": "LabelView",
@@ -5406,7 +5412,7 @@
 									"parentStyle": true,
 									"left": 236,
 									"top": 512,
-									"width": 98.40087890625,
+									"width": 134.55078125,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVWOBFpaOiSbU="
@@ -5495,7 +5501,7 @@
 							"containerChangeable": true,
 							"left": 216,
 							"top": 512,
-							"width": 117.40087890625,
+							"width": 153.55078125,
 							"height": 45,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVWOBFpaOh0SA="
@@ -5917,8 +5923,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 290,
-									"top": 452,
+									"left": 299,
+									"top": 450,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -5939,8 +5945,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 305,
-									"top": 452,
+									"left": 314,
+									"top": 449,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -5961,8 +5967,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 261,
-									"top": 451,
+									"left": 270,
+									"top": 453,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -5981,7 +5987,7 @@
 								"$ref": "AAAAAAGVWOBJtKPHNbg="
 							},
 							"lineStyle": 1,
-							"points": "278:406;275:511",
+							"points": "281:406;290:511",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVWOCg26QnhRk="
@@ -7068,7 +7074,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Package2"
+					"name": "negocio"
 				}
 			]
 		}
