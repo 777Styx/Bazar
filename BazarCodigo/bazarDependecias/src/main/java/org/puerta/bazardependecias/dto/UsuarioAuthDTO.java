@@ -8,16 +8,16 @@ package org.puerta.bazardependecias.dto;
  *
  * @author olive
  */
-public class UsuarioAuthDAO {
+public class UsuarioAuthDTO {
     private String nombre;
     private String contrasena;
     // No incluimos la contraseña por seguridad en el DTO
     
     // Constructores
-    public UsuarioAuthDAO() {
+    public UsuarioAuthDTO() {
     }
     
-    public UsuarioAuthDAO(String nombre, String contrasena) {
+    public UsuarioAuthDTO(String nombre, String contrasena) {
         this.nombre = nombre;
         this.contrasena = contrasena;
     }
