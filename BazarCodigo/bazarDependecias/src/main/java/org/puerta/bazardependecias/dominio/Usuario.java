@@ -1,51 +1,51 @@
 package org.puerta.bazardependecias.dominio;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
-/**
- *
- * @author julli
- */
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String nombre;
     private String contrasena;
-
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Venta> ventas;
+    
+    // Getters y setters
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
     public String getContrasena() {
         return contrasena;
     }
-
+    
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-
+    
+    public List<Venta> getVentas() {
+        return ventas;
+    }
+    
+    public void setVentas(List<Venta> ventas) {
+        this.ventas = ventas;
+    }
 }

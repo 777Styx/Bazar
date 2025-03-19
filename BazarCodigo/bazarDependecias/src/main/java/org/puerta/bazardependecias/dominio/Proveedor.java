@@ -1,21 +1,11 @@
 package org.puerta.bazardependecias.dominio;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
-/**
- *
- * @author julli
- */
 @Entity
-@Table(name = "proveedor") 
-public class Proovedor implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "proveedor")
+public class Proveedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +17,10 @@ public class Proovedor implements Serializable {
     private String direccion;
     private String telefono;
 
+    @OneToMany(mappedBy = "proveedor")
+    private List<Producto> productos;
+
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -75,4 +69,11 @@ public class Proovedor implements Serializable {
         this.telefono = telefono;
     }
 
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
 }

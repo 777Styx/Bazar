@@ -1,38 +1,31 @@
 package org.puerta.bazardependecias.dominio;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import jakarta.persistence.*;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.util.List;
 
-/**
- *
- * @author julli
- */
 @Entity
 @Table(name = "venta")
-public class Venta implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Venta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Float total;
     private Float totalDescuento;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    
-    
-    private ArrayList<Detalle> detalles;
 
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    private List<Detalle> detalles;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -65,12 +58,19 @@ public class Venta implements Serializable {
         this.fecha = fecha;
     }
 
-    public ArrayList<Detalle> getDetalles() {
+    public List<Detalle> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(ArrayList<Detalle> detalles) {
+    public void setDetalles(List<Detalle> detalles) {
         this.detalles = detalles;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

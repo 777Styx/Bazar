@@ -1,29 +1,29 @@
 package org.puerta.bazardependecias.dominio;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
-/**
- *
- * @author julli
- */
 @Entity
 @Table(name = "producto")
-public class Producto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private Float precio;
     private Integer stock;
+    private Integer canDes;
 
+    @OneToMany(mappedBy = "producto")
+    private List<Detalle> detalles;
+
+    @ManyToOne
+    @JoinColumn(name = "proveedor_id")
+    private Proveedor proveedor;
+
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -56,4 +56,27 @@ public class Producto implements Serializable {
         this.stock = stock;
     }
 
+    public Integer getCanDes() {
+        return canDes;
+    }
+
+    public void setCanDes(Integer canDes) {
+        this.canDes = canDes;
+    }
+
+    public List<Detalle> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<Detalle> detalles) {
+        this.detalles = detalles;
+    }
+
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
 }

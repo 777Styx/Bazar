@@ -1,46 +1,33 @@
 package org.puerta.bazardependecias.dto;
 
-/**
- *
- * @author julli
- */
 public class UsuarioDTO {
-     private Long id;
+    private Long id;
     private String nombre;
-    private String contrasena; 
-
+    // No incluimos la contraseña por seguridad en el DTO
+    
+    // Constructores
     public UsuarioDTO() {
     }
-
-    public UsuarioDTO(Long id, String nombre, String contrasena) {
+    
+    public UsuarioDTO(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.contrasena = contrasena;
     }
-
+    
+    // Getters y setters
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-    
-    
 }
