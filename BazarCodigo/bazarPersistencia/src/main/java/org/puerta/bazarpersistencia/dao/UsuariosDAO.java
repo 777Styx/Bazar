@@ -5,7 +5,9 @@
 package org.puerta.bazarpersistencia.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 import org.puerta.bazardependecias.dominio.Usuario;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
@@ -84,6 +86,24 @@ public class UsuariosDAO {
             return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
         } catch (PersistenceException e) {
             throw new PersistenciaException("Error al obtener todos los usuarios", e);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Usuario findByNameAndPassword(String nombre, String contrasena) throws PersistenciaException {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            TypedQuery<Usuario> query = em.createQuery(
+                "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.contrasena = :contrasena", Usuario.class);
+            query.setParameter("nombre", nombre);
+            query.setParameter("contrasena", contrasena);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new PersistenciaException("Usuario no encontrado con nombre: " + nombre);
+        } catch (PersistenceException e) {
+            throw new PersistenciaException("Error al buscar el usuario por nombre y contraseña", e);
         } finally {
             em.close();
         }
