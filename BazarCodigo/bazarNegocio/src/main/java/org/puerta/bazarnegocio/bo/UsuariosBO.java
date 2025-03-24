@@ -7,10 +7,10 @@ package org.puerta.bazarnegocio.bo;
 import java.util.List;
 import org.puerta.bazardependecias.dto.UsuarioDTO;
 import org.puerta.bazardependecias.dto.UsuarioAuthDTO;
-import org.puerta.bazardependecias.dominio.Usuario;
+import org.puerta.bazarpersistencia.dominio.Usuario;
 import org.puerta.bazardependecias.excepciones.NegociosException;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
-import org.puerta.bazardependecias.utils.Convertor;
+import org.puerta.bazarpersistencia.utils.Convertor;
 import org.puerta.bazarpersistencia.dao.UsuariosDAO;
 
 public class UsuariosBO {

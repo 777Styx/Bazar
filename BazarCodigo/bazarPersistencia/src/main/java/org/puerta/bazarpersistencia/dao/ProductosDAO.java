@@ -7,8 +7,8 @@ package org.puerta.bazarpersistencia.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
-import org.puerta.bazardependecias.dominio.Producto;
-import org.puerta.bazardependecias.utils.JPAUtil;
+import org.puerta.bazarpersistencia.dominio.Producto;
+import org.puerta.bazarpersistencia.utils.JPAUtil;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
 
 public class ProductosDAO {

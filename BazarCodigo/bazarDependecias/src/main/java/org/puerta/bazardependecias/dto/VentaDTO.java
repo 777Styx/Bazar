@@ -24,6 +24,13 @@ public class VentaDTO {
         this.usuarioId = usuarioId;
     }
     
+    public VentaDTO(Float total, Float totalDescuento, Date fecha, Long usuarioId) {
+        this.total = total;
+        this.totalDescuento = totalDescuento;
+        this.fecha = fecha;
+        this.usuarioId = usuarioId;
+    }
+    
     // Getters y setters
     public Long getId() {
         return id;

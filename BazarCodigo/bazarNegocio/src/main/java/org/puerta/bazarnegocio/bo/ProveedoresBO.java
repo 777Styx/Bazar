@@ -6,10 +6,10 @@ package org.puerta.bazarnegocio.bo;
 
 import java.util.List;
 import org.puerta.bazardependecias.dto.ProveedorDTO;
-import org.puerta.bazardependecias.dominio.Proveedor;
+import org.puerta.bazarpersistencia.dominio.Proveedor;
 import org.puerta.bazardependecias.excepciones.NegociosException;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
-import org.puerta.bazardependecias.utils.Convertor;
+import org.puerta.bazarpersistencia.utils.Convertor;
 import org.puerta.bazarpersistencia.dao.ProveedoresDAO;
 
 public class ProveedoresBO {

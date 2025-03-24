@@ -21,6 +21,14 @@ public class ProveedorDTO {
         this.telefono = telefono;
     }
     
+    public ProveedorDTO(String nombre, String representante, String correo, String direccion, String telefono) {
+        this.nombre = nombre;
+        this.representante = representante;
+        this.correo = correo;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
+    
     // Getters y setters
     public Long getId() {
         return id;

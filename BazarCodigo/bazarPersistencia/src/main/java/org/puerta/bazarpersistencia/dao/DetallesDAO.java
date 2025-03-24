@@ -12,8 +12,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
-import org.puerta.bazardependecias.dominio.Detalle;
-import org.puerta.bazardependecias.utils.JPAUtil;
+import org.puerta.bazarpersistencia.dominio.Detalle;
+import org.puerta.bazarpersistencia.utils.JPAUtil;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
 
 public class DetallesDAO {

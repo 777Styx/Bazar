@@ -1,4 +1,4 @@
-package org.puerta.bazardependecias.dominio;
+package org.puerta.bazarpersistencia.dominio;
 
 import jakarta.persistence.*;
 

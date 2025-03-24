@@ -14,6 +14,10 @@ public class UsuarioDTO {
         this.nombre = nombre;
     }
     
+    public UsuarioDTO(String nombre) {
+        this.nombre = nombre;
+    }
+    
     // Getters y setters
     public Long getId() {
         return id;

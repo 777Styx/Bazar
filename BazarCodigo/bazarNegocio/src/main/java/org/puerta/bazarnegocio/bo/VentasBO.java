@@ -6,10 +6,10 @@ package org.puerta.bazarnegocio.bo;
 
 import java.util.List;
 import org.puerta.bazardependecias.dto.VentaDTO;
-import org.puerta.bazardependecias.dominio.Venta;
+import org.puerta.bazarpersistencia.dominio.Venta;
 import org.puerta.bazardependecias.excepciones.NegociosException;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
-import org.puerta.bazardependecias.utils.Convertor;
+import org.puerta.bazarpersistencia.utils.Convertor;
 import org.puerta.bazarpersistencia.dao.VentasDAO;
 
 public class VentasBO {

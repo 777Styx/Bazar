@@ -24,6 +24,14 @@ public class DetalleDTO {
         this.productoId = productoId;
     }
     
+    public DetalleDTO(Float importe, Float precio, Integer cantidad, Integer canDes, Long productoId) {
+        this.importe = importe;
+        this.precio = precio;
+        this.cantidad = cantidad;
+        this.canDes = canDes;
+        this.productoId = productoId;
+    }
+    
     // Getters y setters
     public Long getId() {
         return id;

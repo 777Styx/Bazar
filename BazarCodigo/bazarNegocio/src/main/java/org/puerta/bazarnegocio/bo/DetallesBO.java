@@ -4,11 +4,11 @@
  */
 package org.puerta.bazarnegocio.bo;
 
-import org.puerta.bazardependecias.dominio.Detalle;
+import org.puerta.bazarpersistencia.dominio.Detalle;
 import org.puerta.bazardependecias.dto.DetalleDTO;
 import org.puerta.bazardependecias.excepciones.NegociosException;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
-import org.puerta.bazardependecias.utils.Convertor;
+import org.puerta.bazarpersistencia.utils.Convertor;
 import org.puerta.bazarpersistencia.dao.DetallesDAO;
 
 /**

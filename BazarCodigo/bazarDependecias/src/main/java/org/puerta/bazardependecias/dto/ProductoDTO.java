@@ -22,6 +22,14 @@ public class ProductoDTO {
         this.proveedorId = proveedorId;
     }
     
+    public ProductoDTO(String nombre, Float precio, Integer stock, Integer canDes, Long proveedorId) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.canDes = canDes;
+        this.proveedorId = proveedorId;
+    }
+    
     // Getters y setters
     public Long getId() {
         return id;

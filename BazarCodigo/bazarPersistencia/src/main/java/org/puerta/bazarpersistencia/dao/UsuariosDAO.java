@@ -9,9 +9,9 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import org.puerta.bazardependecias.dominio.Usuario;
+import org.puerta.bazarpersistencia.dominio.Usuario;
 import org.puerta.bazardependecias.excepciones.PersistenciaException;
-import org.puerta.bazardependecias.utils.JPAUtil;
+import org.puerta.bazarpersistencia.utils.JPAUtil;
 
 public class UsuariosDAO {
 

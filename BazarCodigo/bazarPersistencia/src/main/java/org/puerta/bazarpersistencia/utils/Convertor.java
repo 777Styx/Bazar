@@ -2,12 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package org.puerta.bazardependecias.utils;
+package org.puerta.bazarpersistencia.utils;
 
+import org.puerta.bazarpersistencia.dominio.Producto;
+import org.puerta.bazarpersistencia.dominio.Detalle;
+import org.puerta.bazarpersistencia.dominio.Venta;
+import org.puerta.bazarpersistencia.dominio.Proveedor;
+import org.puerta.bazarpersistencia.dominio.Usuario;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.ArrayList;
-import org.puerta.bazardependecias.dominio.*;
 import org.puerta.bazardependecias.dto.*;
 
 public class Convertor {
