@@ -9,7 +9,6 @@ package org.puerta.bazarpersistencia.dao;
  * @author olive
  */
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
 import org.puerta.bazarpersistencia.dominio.Detalle;
