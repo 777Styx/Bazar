@@ -51,8 +51,10 @@ public class VentaForm extends JFrame {
 
                 if (columna == DETALLE_COL) {
                     new DetalleForm(); // Abre detalle
+                    dispose();
                 } else if (columna == EDITAR_COL) {
                     new EditarVentaForm(); // Abre edición
+                    dispose();
                 } else if (columna == ELIMINAR_COL) {
                     int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar esta venta?", "Confirmar", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {

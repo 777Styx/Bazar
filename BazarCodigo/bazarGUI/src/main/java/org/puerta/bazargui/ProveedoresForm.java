@@ -22,16 +22,23 @@ public class ProveedoresForm extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // HEADER
-        add(new HeaderPanel(this, HeaderPanel.SeccionActual.PROVEEDORES), BorderLayout.NORTH);
+        // PANEL SUPERIOR QUE CONTIENE HEADER + FILTRO
+        JPanel panelSuperior = new JPanel(new BorderLayout());
 
+        // HEADER
+        panelSuperior.add(new HeaderPanel(this, HeaderPanel.SeccionActual.PROVEEDORES), BorderLayout.NORTH);
 
         // FILTRO
         JPanel filtroPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         filtroPanel.setBackground(new Color(240, 240, 240));
         filtroPanel.add(new JLabel("Buscar"));
         filtroPanel.add(new JTextField(20));
-        add(filtroPanel, BorderLayout.BEFORE_FIRST_LINE);
+
+        // Agregamos filtro debajo del header
+        panelSuperior.add(filtroPanel, BorderLayout.SOUTH);
+
+        // Finalmente se agrega el panel superior completo al frame
+        add(panelSuperior, BorderLayout.NORTH);
 
         // TABLA
         String[] columnas = { "Nombre", "Representante", "Teléfono", "Correo", "Dirección", "Editar", "Eliminar" };

@@ -104,22 +104,36 @@ public class Login extends JFrame {
     private void autenticar() {
         String usuario = txtUsuario.getText().trim();
         String contrasena = new String(txtContrasena.getPassword());
-
+    
         UsuarioAuthDTO auth = new UsuarioAuthDTO(usuario, contrasena);
         UsuariosBO usuariosBO = new UsuariosBO();
-
+    
         try {
             UsuarioDTO resultado = usuariosBO.login(auth);
             lblMensajeError.setText("");
-            JOptionPane.showMessageDialog(this, "Bienvenido " + resultado.getNombre());
+    
+            // Crear mensaje personalizado con icono
+            ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("resources/check.gif"));
+            JLabel mensaje = new JLabel("<html><center>Bienvenido, <b>" + resultado.getNombre() + "</b><br>Autenticación exitosa</center></html>", SwingConstants.CENTER);
+            mensaje.setFont(new Font("SansSerif", Font.PLAIN, 14));
+    
+            JPanel panel = new JPanel(new BorderLayout(10, 10));
+            panel.add(mensaje, BorderLayout.NORTH);
+            panel.add(new JLabel(iconoCheck), BorderLayout.CENTER);
+            panel.setPreferredSize(new Dimension(250, 120)); 
+    
+            JOptionPane.showMessageDialog(this, panel, "¡Acceso Concedido!", JOptionPane.PLAIN_MESSAGE);
+    
+            // Ir al menú principal
             MenuPrincipal menu = new MenuPrincipal();
             menu.setVisible(true);
             this.dispose(); // Cierra la ventana de login
-            
+    
         } catch (NegociosException e) {
             lblMensajeError.setText("Error al autenticar el usuario");
         }
     }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Login().setVisible(true));

@@ -61,6 +61,8 @@ public class InventarioForm extends JFrame {
                     return;
                 if (columna == 4) {
                     new EditarProductoForm().setVisible(true); // Aquí se abre la pantalla de edición de producto
+                    dispose(); // Cierra la ventana actual
+                    
                 } else if (columna == 5) {
                     int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar este producto?", "Confirmar",
                             JOptionPane.YES_NO_OPTION);

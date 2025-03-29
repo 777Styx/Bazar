@@ -24,7 +24,7 @@ public class RegistrarVentaForm extends JFrame {
 
         // AGRUPAR HEADER Y FILTRO EN UN SOLO PANEL
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.add(new HeaderPanel(this, HeaderPanel.SeccionActual.VENTAS), BorderLayout.NORTH); 
+        panelSuperior.add(new HeaderPanel(this, HeaderPanel.SeccionActual.VENTAS), BorderLayout.NORTH);
 
         // PANEL DE FILTRO
         JPanel filtroPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -76,7 +76,24 @@ public class RegistrarVentaForm extends JFrame {
         lblTotal.setFont(new Font("SansSerif", Font.PLAIN, 24));
 
         RoundedButton btnConfirmar = new RoundedButton("Confirmar");
+
+        btnConfirmar.addActionListener(_ -> {
+            // lógica para confirmar la venta
+            VentaForm ventaForm = new VentaForm();
+            ventaForm.setVisible(true);
+            dispose();
+        });
         RoundedButton btnCancelar = new RoundedButton("Cancelar Venta");
+
+        btnCancelar.addActionListener(_ -> {
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar la venta?", "Confirmar",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                VentaForm ventaForm = new VentaForm();
+                ventaForm.setVisible(true);
+                dispose();
+            }
+        });
 
         panelDerecho.add(lblTextoTotal);
         panelDerecho.add(lblTotal);

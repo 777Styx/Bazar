@@ -3,7 +3,12 @@ package org.puerta.bazargui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import resources.RoundedButton;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -83,6 +88,20 @@ public class DetalleForm extends JFrame {
                 }
             }
         });
+
+        // FOOTER con botón Salir
+        JPanel footer = new JPanel();
+        RoundedButton btnSalir = new RoundedButton("Salir");
+        btnSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrir VentaForm y cerrar la ventana actual
+                new VentaForm();
+                dispose();
+            }
+        });
+        footer.add(btnSalir);
+        add(footer, BorderLayout.SOUTH);
 
         setVisible(true);
     }
