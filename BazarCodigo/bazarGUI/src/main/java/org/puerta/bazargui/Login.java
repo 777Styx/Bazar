@@ -65,7 +65,7 @@ public class Login extends JFrame {
         btnAceptar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAceptar.setMaximumSize(new Dimension(120, 35));
         btnAceptar.setMargin(new Insets(10, 10, 10, 10));
-        btnAceptar.addActionListener(e -> autenticar());
+        btnAceptar.addActionListener(_ -> autenticar());
 
         lblMensajeError = new JLabel(" ");
         lblMensajeError.setForeground(Color.RED);

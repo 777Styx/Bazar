@@ -12,6 +12,7 @@ public class MenuPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
+        // HEADER: Botón para volver a Login
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(Color.WHITE);
         JButton btnDevolver = new JButton(escalarIcono("resources/devolver.png", 60, 60));
@@ -20,13 +21,12 @@ public class MenuPrincipal extends JFrame {
         header.add(btnDevolver);
         add(header, BorderLayout.NORTH);
 
-        btnDevolver.addActionListener(e -> {
-            Login login = new Login();
-            login.setVisible(true);
+        btnDevolver.addActionListener(_ -> {
+            new Login().setVisible(true);
             dispose();
-
         });
 
+        // GRID de opciones
         JPanel grid = new JPanel(new GridLayout(2, 4, 30, 30));
         grid.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         grid.setBackground(Color.WHITE);
@@ -39,31 +39,61 @@ public class MenuPrincipal extends JFrame {
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
-        
+
         add(grid, BorderLayout.CENTER);
         setVisible(true);
     }
 
+    // Método para crear un panel que actúa como botón
     private JPanel crearBoton(String rutaImagen, String texto) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(0, 169, 178)); // Color cyan
         panel.setPreferredSize(new Dimension(180, 200));
-    
+
         JLabel icono = new JLabel(escalarIcono(rutaImagen, 80, 80));
         icono.setHorizontalAlignment(SwingConstants.CENTER);
-    
+
         JLabel etiqueta = new JLabel(texto);
         etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
         etiqueta.setForeground(Color.BLACK);
         etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 24));
-    
+
         panel.add(icono, BorderLayout.CENTER);
         panel.add(etiqueta, BorderLayout.SOUTH);
-    
+
+        // Acción: Redirecciona según el texto
+        panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                redireccionar(texto);
+            }
+        });
+
         return panel;
     }
-    
 
+    // Redirecciona a las pantallas correspondientes según la opción
+    private void redireccionar(String opcion) {
+        switch (opcion.toLowerCase()) {
+            case "venta":
+                new VentaForm().setVisible(true);
+                dispose();
+                break;
+            case "inventario":
+                new InventarioForm().setVisible(true);
+                dispose();
+                break;
+            case "proveedores":
+                new ProveedoresForm().setVisible(true);
+                dispose();
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "La opción \"" + opcion + "\" está en construcción.");
+                break;
+        }
+    }
+
+    // Método para escalar imágenes
     private ImageIcon escalarIcono(String ruta, int ancho, int alto) {
         java.net.URL url = getClass().getClassLoader().getResource(ruta);
         if (url == null) {
@@ -75,7 +105,6 @@ public class MenuPrincipal extends JFrame {
         return new ImageIcon(imagen);
     }
 
-    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MenuPrincipal::new);
     }
