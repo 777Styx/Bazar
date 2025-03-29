@@ -6,11 +6,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>bazarDependecias</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- Jakarta Persistence API -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
@@ -44,6 +39,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bazarDependecias</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     
