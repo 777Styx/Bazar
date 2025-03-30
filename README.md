@@ -54,7 +54,4 @@ Consiste en el desarrollo de un sistema de escritorio para la gestión de ventas
 - **Oliver Inzunza**
 - **Puerta Jullian**
 
----
-
-## 📁 Estructura del proyecto (opcional)
 
