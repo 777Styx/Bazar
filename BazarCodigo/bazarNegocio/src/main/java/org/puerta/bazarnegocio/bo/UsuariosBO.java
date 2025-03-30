@@ -25,7 +25,7 @@ public class UsuariosBO {
 
             Usuario usuario = new Usuario();
             usuario.setNombre(usuarioDTO.getNombre());
-            usuario.setContrasena(usuarioDTO.getContrasena()); // Aquí deberías encriptar la contraseña
+            usuario.setContrasena(usuarioDTO.getContrasena());
 
             usuariosDAO.save(usuario);
         } catch (PersistenciaException e) {
@@ -65,6 +65,15 @@ public class UsuariosBO {
             return usuarioDTO;
         } catch (PersistenciaException e) {
             throw new NegociosException("Error al obtener el usuario", e);
+        }
+    }
+
+    public List<UsuarioDTO> obtenerTodosLosUsuarios() throws NegociosException {
+        try {
+            List<Usuario> usuarios = usuariosDAO.findAll();
+            return Convertor.toUsuarioDTOList(usuarios);
+        } catch (PersistenciaException e) {
+            throw new NegociosException("Error al obtener la lista de usuarios", e);
         }
     }
 }

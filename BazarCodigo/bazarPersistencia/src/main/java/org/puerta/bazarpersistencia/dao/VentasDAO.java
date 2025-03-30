@@ -36,6 +36,8 @@ public class VentasDAO {
             if (venta == null) {
                 throw new PersistenciaException("Venta con ID " + id + " no encontrada");
             }
+
+            venta.getDetalles().size();
             return venta;
         } finally {
             em.close();
@@ -81,11 +83,18 @@ public class VentasDAO {
     public List<Venta> findAll() throws PersistenciaException {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return em.createQuery("SELECT v FROM Venta v", Venta.class).getResultList();
+            List<Venta> ventas = em.createQuery("SELECT v FROM Venta v", Venta.class).getResultList();
+
+            for (Venta venta : ventas) {
+                venta.getDetalles().size();
+            }
+
+            return ventas;
         } catch (PersistenceException e) {
             throw new PersistenciaException("Error al obtener todas las ventas", e);
         } finally {
             em.close();
         }
     }
+
 }

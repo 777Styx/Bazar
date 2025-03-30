@@ -90,12 +90,12 @@ public class UsuariosDAO {
             em.close();
         }
     }
-    
+
     public Usuario findByNameAndPassword(String nombre, String contrasena) throws PersistenciaException {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             TypedQuery<Usuario> query = em.createQuery(
-                "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.contrasena = :contrasena", Usuario.class);
+                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.contrasena = :contrasena", Usuario.class);
             query.setParameter("nombre", nombre);
             query.setParameter("contrasena", contrasena);
 

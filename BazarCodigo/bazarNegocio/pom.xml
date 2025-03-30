@@ -8,6 +8,11 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>bazarDependecias</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>bazarPersistencia</artifactId>
             <version>${project.version}</version>
         </dependency>
