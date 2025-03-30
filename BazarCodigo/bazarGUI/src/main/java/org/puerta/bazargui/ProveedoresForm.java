@@ -3,6 +3,10 @@ package org.puerta.bazargui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import org.puerta.bazardependecias.dto.ProveedorDTO;
+import org.puerta.bazarnegocio.bo.ProveedoresBO;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,14 +38,13 @@ public class ProveedoresForm extends JFrame {
         filtroPanel.add(new JLabel("Buscar"));
         filtroPanel.add(new JTextField(20));
 
-        // Agregamos filtro debajo del header
         panelSuperior.add(filtroPanel, BorderLayout.SOUTH);
 
-        // Finalmente se agrega el panel superior completo al frame
         add(panelSuperior, BorderLayout.NORTH);
 
         // TABLA
-        String[] columnas = { "Nombre", "Representante", "Teléfono", "Correo", "Dirección", "Editar", "Eliminar" };
+        String[] columnas = { "id", "Correo", "Dirección", "Nombre", "Representante", "Teléfono", "Editar" };
+
         modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -67,14 +70,28 @@ public class ProveedoresForm extends JFrame {
 
         // Íconos
         ImageIcon iconEditar = escalarIcono("resources/editar.png", 20, 20);
-        ImageIcon iconEliminar = escalarIcono("resources/delete.png", 20, 20);
 
-        // FILA DE EJEMPLO
-        modelo.addRow(new Object[] {
-                "CCP", "Juan Perez", "6441-000-0000", "ccp.juan@gmail.com", "Tabasco #283",
-                iconEditar,
-                iconEliminar
-        });
+        // Cargar
+
+        try {
+            ProveedoresBO proveedoresBO = new ProveedoresBO();
+            java.util.List<ProveedorDTO> proveedores = proveedoresBO.obtenerTodos();
+
+            for (ProveedorDTO p : proveedores) {
+                modelo.addRow(new Object[] {
+                        p.getId(),
+                        p.getCorreo(),
+                        p.getDireccion(),
+                        p.getNombre(),
+                        p.getRepresentante(),
+                        p.getTelefono(),
+                        escalarIcono("resources/editar.png", 20, 20)
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar proveedores: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
         // ACCIONES
         tablaProveedores.addMouseListener(new MouseAdapter() {
@@ -83,14 +100,18 @@ public class ProveedoresForm extends JFrame {
                 int fila = tablaProveedores.rowAtPoint(e.getPoint());
                 int columna = tablaProveedores.columnAtPoint(e.getPoint());
 
-                if (columna == 5) {
-                    new EditarProveedorForm(); // Vincular al form de edición
-                } else if (columna == 6) {
-                    int confirm = JOptionPane.showConfirmDialog(null,
-                            "¿Eliminar este proveedor?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        modelo.removeRow(fila);
-                    }
+                if (columna == 6) {
+                    Long id = Long.parseLong(modelo.getValueAt(fila, 0).toString());
+                    ProveedorDTO proveedor = new ProveedorDTO();
+                    proveedor.setId(id);
+                    proveedor.setCorreo(modelo.getValueAt(fila, 1).toString());
+                    proveedor.setDireccion(modelo.getValueAt(fila, 2).toString());
+                    proveedor.setNombre(modelo.getValueAt(fila, 3).toString());
+                    proveedor.setRepresentante(modelo.getValueAt(fila, 4).toString());
+                    proveedor.setTelefono(modelo.getValueAt(fila, 5).toString());
+
+                    new EditarProveedorForm(proveedor);
+                    dispose();
                 }
             }
         });
@@ -106,9 +127,9 @@ public class ProveedoresForm extends JFrame {
         btnRegistrar.setPreferredSize(new Dimension(150, 60));
         btnRegistrar.setBackground(Color.WHITE);
         btnRegistrar.setForeground(Color.BLACK);
-
         btnRegistrar.addActionListener(_ -> {
-            new RegistrarProveedorForm(); // Vincular al form de registro
+            new RegistrarProveedorForm();
+            dispose();
         });
 
         JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));

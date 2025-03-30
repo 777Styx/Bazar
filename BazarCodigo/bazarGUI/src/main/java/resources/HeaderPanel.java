@@ -6,6 +6,7 @@ import org.puerta.bazargui.InventarioForm;
 import org.puerta.bazargui.MenuPrincipal;
 import org.puerta.bazargui.ProveedoresForm;
 import org.puerta.bazargui.VentaForm;
+import org.puerta.bazargui.UsuariosForm;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,7 +15,7 @@ import java.awt.event.MouseEvent;
 public class HeaderPanel extends JPanel {
 
     public enum SeccionActual {
-        VENTAS, INVENTARIO, PROVEEDORES, NINGUNA
+        VENTAS, INVENTARIO, PROVEEDORES, NINGUNA, USUARIOS
     }
 
     public HeaderPanel(JFrame owner, SeccionActual actual) {
@@ -33,6 +34,8 @@ public class HeaderPanel extends JPanel {
         addBoton(panelNavegacion, "inventario_blanco.png", SeccionActual.INVENTARIO, actual, owner, InventarioForm.class);
         addBoton(panelNavegacion, "proveedores_blanco.png", SeccionActual.PROVEEDORES, actual, owner, ProveedoresForm.class);
         addBoton(panelNavegacion, "devolver_blanco.png", SeccionActual.NINGUNA, actual, owner, MenuPrincipal.class);
+        addBoton(panelNavegacion, "user.png", SeccionActual.USUARIOS, actual, owner, UsuariosForm.class);
+
 
         add(panelNavegacion, BorderLayout.EAST);
     }
@@ -55,7 +58,7 @@ public class HeaderPanel extends JPanel {
                 }
             });
         } else {
-            label.setEnabled(false); // Desactiva si ya está en esa sección
+            label.setEnabled(false);
         }
 
         panel.add(label);

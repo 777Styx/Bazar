@@ -35,50 +35,50 @@ public class SeleccionarProveedorDialog extends JDialog {
         header.add(titulo);
         add(header, BorderLayout.NORTH);
 
-       // Constante para la columna del checkbox
-final int COLUMNA_CHECKBOX = 0;
+        // Constante para la columna del checkbox
+        final int COLUMNA_CHECKBOX = 0;
 
-// Crear modelo de tabla con una columna de checkboxes
-DefaultTableModel modelo = new DefaultTableModel(null,
-        new Object[] { "Seleccionar", "Nombre", "Representante", "Teléfono" }) {
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        return columnIndex == COLUMNA_CHECKBOX ? Boolean.class : String.class;
-    }
+        // Crear modelo de tabla con una columna de checkboxes
+        DefaultTableModel modelo = new DefaultTableModel(null,
+                new Object[] { "Seleccionar", "Nombre", "Representante", "Teléfono" }) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == COLUMNA_CHECKBOX ? Boolean.class : String.class;
+            }
 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return column == COLUMNA_CHECKBOX;
-    }
-};
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == COLUMNA_CHECKBOX;
+            }
+        };
 
-// Crear tabla con el modelo
-JTable tabla = new JTable(modelo);
-tabla.setRowHeight(30);
+        // Crear tabla con el modelo
+        JTable tabla = new JTable(modelo);
+        tabla.setRowHeight(30);
 
-// Agregar listener para asegurar que solo un checkbox esté seleccionado
-modelo.addTableModelListener(new TableModelListener() {
-    @Override
-    public void tableChanged(TableModelEvent e) {
-        int row = e.getFirstRow();
-        int column = e.getColumn();
+        // Agregar listener para asegurar que solo un checkbox esté seleccionado
+        modelo.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
 
-        if (column == COLUMNA_CHECKBOX && Boolean.TRUE.equals(modelo.getValueAt(row, column))) {
-            // Desactivar los demás checkboxes
-            modelo.removeTableModelListener(this);
-            for (int i = 0; i < modelo.getRowCount(); i++) {
-                if (i != row && Boolean.TRUE.equals(modelo.getValueAt(i, COLUMNA_CHECKBOX))) {
-                    modelo.setValueAt(false, i, COLUMNA_CHECKBOX);
+                if (column == COLUMNA_CHECKBOX && Boolean.TRUE.equals(modelo.getValueAt(row, column))) {
+                    // Desactivar los demás checkboxes
+                    modelo.removeTableModelListener(this);
+                    for (int i = 0; i < modelo.getRowCount(); i++) {
+                        if (i != row && Boolean.TRUE.equals(modelo.getValueAt(i, COLUMNA_CHECKBOX))) {
+                            modelo.setValueAt(false, i, COLUMNA_CHECKBOX);
+                        }
+                    }
+                    modelo.addTableModelListener(this);
                 }
             }
-            modelo.addTableModelListener(this);
-        }
-    }
-});
+        });
 
-// ScrollPane y agregado al layout
-JScrollPane scroll = new JScrollPane(tabla);
-add(scroll, BorderLayout.CENTER);
+        // ScrollPane y agregado al layout
+        JScrollPane scroll = new JScrollPane(tabla);
+        add(scroll, BorderLayout.CENTER);
 
         // Footer
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -99,7 +99,7 @@ add(scroll, BorderLayout.CENTER);
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 Boolean seleccionado = (Boolean) modelo.getValueAt(i, 0);
                 if (Boolean.TRUE.equals(seleccionado)) {
-                    String nombre = modelo.getValueAt(i, 1).toString(); // columna 1 = nombre
+                    String nombre = modelo.getValueAt(i, 1).toString();
                     try {
                         ProveedoresBO bo = new ProveedoresBO();
                         proveedorSeleccionado = bo.encontrarPorNombre(nombre);

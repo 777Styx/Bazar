@@ -90,7 +90,7 @@ public class ProductoDTO {
 
     @Override
     public String toString() {
-        return nombre; 
+        return nombre;
     }
 
 }

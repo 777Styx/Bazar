@@ -4,10 +4,15 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.puerta.bazardependecias.dto.VentaDTO;
+import org.puerta.bazarnegocio.bo.ProductosBO;
+import org.puerta.bazarnegocio.bo.VentasBO;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.text.SimpleDateFormat;
+import java.util.List;
 import resources.HeaderPanel;
 import resources.RoundedButton;
 
@@ -26,15 +31,21 @@ public class VentaForm extends JFrame {
         add(new HeaderPanel(this, HeaderPanel.SeccionActual.VENTAS), BorderLayout.NORTH);
 
         // Tabla de ventas
-        String[] columnas = { "ID Venta", "Total", "Total Descuento", "Fecha", "Usuario", "Detalle", "Editar", "Eliminar" };
-        modelo = new DefaultTableModel(columnas, 0);
+        String[] columnas = { "ID", "Fecha", "Total", "Descuento Total", "Usuario", "Detalle", "Eliminar" };
+        modelo = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+
+                return false;
+            }
+        };
+
         tablaVentas = new JTable(modelo);
         tablaVentas.setRowHeight(40);
 
         // Renderizadores de íconos
         tablaVentas.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
         tablaVentas.getColumnModel().getColumn(6).setCellRenderer(new IconCellRenderer());
-        tablaVentas.getColumnModel().getColumn(7).setCellRenderer(new IconCellRenderer());
 
         // Listener único para manejar todas las acciones de la tabla
         tablaVentas.addMouseListener(new MouseAdapter() {
@@ -43,23 +54,44 @@ public class VentaForm extends JFrame {
                 int fila = tablaVentas.rowAtPoint(e.getPoint());
                 int columna = tablaVentas.columnAtPoint(e.getPoint());
 
-                if (fila == -1 || columna == -1) return;
+                if (fila == -1 || columna == -1)
+                    return;
 
                 final int DETALLE_COL = 5;
-                final int EDITAR_COL = 6;
-                final int ELIMINAR_COL = 7;
+                final int ELIMINAR_COL = 6;
 
                 if (columna == DETALLE_COL) {
-                    new DetalleForm(); // Abre detalle
-                    dispose();
-                } else if (columna == EDITAR_COL) {
-                    new EditarVentaForm(); // Abre edición
-                    dispose();
-                } else if (columna == ELIMINAR_COL) {
-                    int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar esta venta?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        modelo.removeRow(fila);
+                    try {
+                        Long idVenta = Long.parseLong(modelo.getValueAt(fila, 0).toString());
+                        VentasBO ventasBO = new VentasBO();
+                        VentaDTO venta = ventasBO.obtenerVentaPorId(idVenta);
+
+                        if (venta != null) {
+                            new DetalleForm(venta);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Venta no encontrada.");
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Error al cargar detalles de la venta: " + ex.getMessage());
                     }
+                }
+                if (columna == ELIMINAR_COL) {
+                    int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar esta venta?", "Confirmar",
+                            JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        try {
+                            Long idVenta = Long.parseLong(modelo.getValueAt(fila, 0).toString());
+                            VentasBO ventasBO = new VentasBO();
+                            ventasBO.eliminarVenta(idVenta);
+                            modelo.removeRow(fila);
+                            JOptionPane.showMessageDialog(null, "Venta eliminada correctamente.");
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error al eliminar la venta: " + ex.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+
                 }
             }
         });
@@ -91,15 +123,29 @@ public class VentaForm extends JFrame {
 
         add(panelDerecho, BorderLayout.EAST);
 
-        // Ejemplo
-        modelo.addRow(new Object[] {
-                "1", "$400", "$20", "2024-03-29", "fran", "", "", ""
-        });
+        try {
+            ProductosBO productosBO = new ProductosBO();
+            VentasBO ventasBO = new VentasBO();
+            List<VentaDTO> ventas = ventasBO.obtenerTodos();
+
+            for (VentaDTO v : ventas) {
+                String fechaFormateada = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(v.getFecha());
+                modelo.addRow(new Object[] {
+                        v.getId(),
+                        fechaFormateada,
+                        "$" + v.getTotal(),
+                        "$" + v.getTotalDescuento(),
+                        v.getNombreUsuario(),
+                        "", "", ""
+                });
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar ventas: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
         setVisible(true);
     }
-
-  
 
     // Método para escalar imágenes
     private ImageIcon escalarIcono(String ruta, int ancho, int alto) {
@@ -117,29 +163,24 @@ public class VentaForm extends JFrame {
         SwingUtilities.invokeLater(VentaForm::new);
     }
 
-
-    // Renderizador para las celdas de la tabla (Detalle, Editar, Eliminar)
+    // Renderizador para las celdas de la tabla
     private static final int DETALLE_COL_INDEX = 5;
-    private static final int EDITAR_COL_INDEX = 6;
-    private static final int ELIMINAR_COL_INDEX = 7;
+    private static final int ELIMINAR_COL_INDEX = 6;
 
     private class IconCellRenderer extends DefaultTableCellRenderer {
         private final ImageIcon detalleIcon = escalarIcono("resources/detalle.png", 16, 16);
-        private final ImageIcon editarIcon = escalarIcono("resources/editar.png", 16, 16);
         private final ImageIcon eliminarIcon = escalarIcono("resources/delete.png", 16, 16);
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                boolean isSelected, boolean hasFocus,
+                int row, int column) {
 
             JLabel label = new JLabel();
             label.setHorizontalAlignment(SwingConstants.CENTER);
 
             if (column == DETALLE_COL_INDEX) {
                 label.setIcon(detalleIcon);
-            } else if (column == EDITAR_COL_INDEX) {
-                label.setIcon(editarIcon);
             } else if (column == ELIMINAR_COL_INDEX) {
                 label.setIcon(eliminarIcon);
             }

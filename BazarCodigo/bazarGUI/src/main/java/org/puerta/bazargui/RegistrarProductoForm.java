@@ -29,12 +29,11 @@ public class RegistrarProductoForm extends JFrame {
         // HEADER
         add(new HeaderPanel(this, HeaderPanel.SeccionActual.INVENTARIO), BorderLayout.NORTH);
 
-        // TABLA DE PRODUCTOS - Estructura corregida
+        // TABLA DE PRODUCTOS
         String[] columnas = { "ID", "Descuento (%)", "Nombre", "Precio", "Stock", "Proveedor", "Eliminar" };
         modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Solo la columna ID no es editable
                 return column != 0;
             }
         };
@@ -70,13 +69,13 @@ public class RegistrarProductoForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 modelo.addRow(new Object[] {
-                        "", // ID (vacío, lo asigna la BD)
-                        "", // Descuento (%)
-                        "", // Nombre
-                        "", // Precio
-                        "", // Stock
-                        escalarIcono("resources/more.png", 20, 20), // Ícono de proveedor (abre diálogo)
-                        escalarIcono("resources/delete.png", 18, 18) // Botón eliminar
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        escalarIcono("resources/more.png", 20, 20),
+                        escalarIcono("resources/delete.png", 18, 18)
                 });
             }
         });
@@ -91,24 +90,22 @@ public class RegistrarProductoForm extends JFrame {
                 if (fila == -1 || columna == -1)
                     return;
 
-                // Botón de proveedor (columna 5)
+                // Botón de proveedor
                 if (columna == 5) {
                     SeleccionarProveedorDialog dialog = new SeleccionarProveedorDialog();
                     ProveedorDTO proveedor = dialog.getProveedorSeleccionado();
                     if (proveedor != null) {
                         modelo.setValueAt(proveedor.getNombre(), fila, columna);
-                        tablaProductos.putClientProperty("proveedor_" + fila, proveedor); // Guarda el objeto
-                                                                                          // ProveedorDTO
+                        tablaProductos.putClientProperty("proveedor_" + fila, proveedor);
                     }
                 }
 
-                // Botón eliminar (última columna: 7)
+                // Botón eliminar
                 if (columna == 6) {
                     int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar este producto?", "Confirmar",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
                         ((DefaultTableModel) tablaProductos.getModel()).removeRow(fila);
-                        // También puedes limpiar el proveedor asociado si lo deseas:
                         tablaProductos.putClientProperty("proveedor_" + fila, null);
                     }
                 }
@@ -141,14 +138,14 @@ public class RegistrarProductoForm extends JFrame {
 
         btnConfirmar.addActionListener(_ -> {
             ProductosBO productosBO = new ProductosBO();
-        
+
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 try {
-                    String nombre = modelo.getValueAt(i, 2).toString().trim();      // Columna Nombre
-                    String precioStr = modelo.getValueAt(i, 3).toString().trim();   // Columna Precio
-                    String stockStr = modelo.getValueAt(i, 4).toString().trim();    // Columna Stock
-                    String canDesStr = modelo.getValueAt(i, 1).toString().trim();   // Columna Descuento
-        
+                    String nombre = modelo.getValueAt(i, 2).toString().trim();
+                    String precioStr = modelo.getValueAt(i, 3).toString().trim();
+                    String stockStr = modelo.getValueAt(i, 4).toString().trim();
+                    String canDesStr = modelo.getValueAt(i, 1).toString().trim();
+
                     // Validar nombre (solo letras y espacios)
                     if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
                         JOptionPane.showMessageDialog(null,
@@ -156,7 +153,7 @@ public class RegistrarProductoForm extends JFrame {
                                 "Nombre inválido", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-        
+
                     // Validar precio (positivo y con hasta 2 decimales)
                     if (!precioStr.matches("^\\d+(\\.\\d{1,2})?$")) {
                         JOptionPane.showMessageDialog(null,
@@ -165,7 +162,7 @@ public class RegistrarProductoForm extends JFrame {
                         return;
                     }
                     float precio = Float.parseFloat(precioStr);
-        
+
                     // Validar stock (entero positivo)
                     if (!stockStr.matches("^\\d+$")) {
                         JOptionPane.showMessageDialog(null,
@@ -174,7 +171,7 @@ public class RegistrarProductoForm extends JFrame {
                         return;
                     }
                     int stock = Integer.parseInt(stockStr);
-        
+
                     // Validar descuento (entre 0 y 100)
                     if (!canDesStr.matches("^\\d+$")) {
                         JOptionPane.showMessageDialog(null,
@@ -189,7 +186,7 @@ public class RegistrarProductoForm extends JFrame {
                                 "Descuento fuera de rango", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-        
+
                     // Validar proveedor
                     ProveedorDTO proveedor = (ProveedorDTO) tablaProductos.getClientProperty("proveedor_" + i);
                     if (proveedor == null) {
@@ -198,7 +195,7 @@ public class RegistrarProductoForm extends JFrame {
                                 "Proveedor requerido", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-        
+
                     // Crear DTO
                     ProductoDTO dto = new ProductoDTO();
                     dto.setNombre(nombre);
@@ -206,10 +203,10 @@ public class RegistrarProductoForm extends JFrame {
                     dto.setStock(stock);
                     dto.setProveedorId(proveedor.getId());
                     dto.setCanDes(canDes);
-        
+
                     // Guardar producto
                     productosBO.registrarProducto(dto);
-        
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null,
                             "Error al registrar el producto en la fila " + (i + 1) + ":\n" + ex.getMessage(), "Error",
@@ -217,7 +214,7 @@ public class RegistrarProductoForm extends JFrame {
                     return;
                 }
             }
-        
+
             // Confirmación
             ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("resources/check.gif"));
             JLabel mensaje = new JLabel("<html><center>El producto ha sido agregado<br>correctamente</center></html>",
@@ -228,12 +225,11 @@ public class RegistrarProductoForm extends JFrame {
             panel.add(new JLabel(iconoCheck), BorderLayout.CENTER);
             panel.setPreferredSize(new Dimension(250, 120));
             JOptionPane.showMessageDialog(null, panel, "Confirmación", JOptionPane.PLAIN_MESSAGE);
-        
+
             modelo.setRowCount(0);
             new InventarioForm().setVisible(true);
             dispose();
         });
-        
 
         tablaProductos.addMouseListener(new MouseAdapter() {
             @Override
@@ -248,13 +244,11 @@ public class RegistrarProductoForm extends JFrame {
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
                         try {
-                            Long idProducto = Long.parseLong(modelo.getValueAt(fila, 0).toString()); // Asegúrate que la
-                                                                                                     // columna 0 tenga
-                                                                                                     // el ID
+                            Long idProducto = Long.parseLong(modelo.getValueAt(fila, 0).toString());
                             ProductosBO productosBO = new ProductosBO();
                             productosBO.borrarProducto(idProducto);
 
-                            modelo.removeRow(fila); // Eliminar del modelo solo si la eliminación en BD fue exitosa
+                            modelo.removeRow(fila);
                             JOptionPane.showMessageDialog(null, "Producto eliminado correctamente.");
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + ex.getMessage(),

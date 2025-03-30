@@ -41,7 +41,7 @@ public class SeleccionarProductosDialog extends JDialog {
         add(searchPanel, BorderLayout.BEFORE_FIRST_LINE);
 
         // Tabla
-        String[] columnas = {"", "ID", "Nombre", "Precio", "Stock"};
+        String[] columnas = { "", "ID", "Nombre", "Precio", "Stock" };
         modelo = new DefaultTableModel(columnas, 0) {
             public Class<?> getColumnClass(int column) {
                 return column == 0 ? Boolean.class : String.class;
@@ -56,7 +56,7 @@ public class SeleccionarProductosDialog extends JDialog {
         JScrollPane scroll = new JScrollPane(tabla);
         add(scroll, BorderLayout.CENTER);
 
-        // Cargar datos de prueba (reemplaza esto por llamada real)
+        // Cargar datos de prueba
         agregarProducto("17293412", "Camisa Verano", "$200", "7");
         agregarProducto("17293413", "Chaquetón invernal", "$700", "1");
 
@@ -76,7 +76,7 @@ public class SeleccionarProductosDialog extends JDialog {
                     productosSeleccionados.add(new ProductoSeleccionado(id, nombre, precio, stock));
                 }
             }
-            dispose(); // cerrar al agregar
+            dispose();
         });
 
         JPanel bottom = new JPanel();
@@ -87,7 +87,7 @@ public class SeleccionarProductosDialog extends JDialog {
     }
 
     private void agregarProducto(String id, String nombre, String precio, String stock) {
-        modelo.addRow(new Object[]{false, id, nombre, precio, stock});
+        modelo.addRow(new Object[] { false, id, nombre, precio, stock });
     }
 
     public ArrayList<ProductoSeleccionado> getProductosSeleccionados() {

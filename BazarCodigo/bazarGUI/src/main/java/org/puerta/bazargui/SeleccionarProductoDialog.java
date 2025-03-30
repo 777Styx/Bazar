@@ -3,9 +3,14 @@ package org.puerta.bazargui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import org.puerta.bazardependecias.dto.ProductoDTO;
+import org.puerta.bazarnegocio.bo.ProductosBO;
+import org.puerta.bazardependecias.excepciones.NegociosException;
+
 import resources.RoundedButton;
 
 import java.awt.*;
+import java.util.List;
 
 public class SeleccionarProductoDialog extends JDialog {
 
@@ -19,9 +24,16 @@ public class SeleccionarProductoDialog extends JDialog {
         setLocationRelativeTo(owner);
         setLayout(new BorderLayout());
 
-        String[] columnas = { "ID", "Nombre", "Precio", "Stock" };
-        modelo = new DefaultTableModel(columnas, 0);
+        String[] columnas = { "ID", "Nombre", "Precio", "Descuento (%)", "Stock" };
+        modelo = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         tabla = new JTable(modelo);
+
         tabla.setRowHeight(30);
         JScrollPane scroll = new JScrollPane(tabla);
         add(scroll, BorderLayout.CENTER);
@@ -37,13 +49,16 @@ public class SeleccionarProductoDialog extends JDialog {
             if (fila != -1) {
                 String nombre = modelo.getValueAt(fila, 1).toString();
                 if (!nombre.equalsIgnoreCase(productoActual)) {
-                    String id = modelo.getValueAt(fila, 0).toString();
-                    String precio = modelo.getValueAt(fila, 2).toString();
-                    String stock = modelo.getValueAt(fila, 3).toString();
-                    productoSeleccionado = new Producto(id, nombre, precio, stock);
+                    productoSeleccionado = new Producto();
+                    productoSeleccionado.id = Long.parseLong(modelo.getValueAt(fila, 0).toString());
+                    productoSeleccionado.nombre = nombre;
+                    productoSeleccionado.precio = Float.parseFloat(modelo.getValueAt(fila, 2).toString());
+                    productoSeleccionado.canDes = Integer.parseInt(modelo.getValueAt(fila, 3).toString());
+                    productoSeleccionado.stock = Integer.parseInt(modelo.getValueAt(fila, 4).toString());
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Seleccione un producto diferente al actual.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this,
+                            "Seleccione un producto diferente al actual.", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -53,30 +68,43 @@ public class SeleccionarProductoDialog extends JDialog {
         panelInferior.add(btnSeleccionar);
         add(panelInferior, BorderLayout.SOUTH);
 
-        // Cargar productos de ejemplo
-        agregarProducto("17293412", "Camisa Verano", "$200", "7");
-        agregarProducto("17293413", "Pantalón Cargo", "$400", "3");
-        agregarProducto("17293414", "Blusa Elegante", "$350", "5");
+        // Cargar productos reales
+        cargarProductos(productoActual);
 
         setVisible(true);
     }
 
-    private void agregarProducto(String id, String nombre, String precio, String stock) {
-        modelo.addRow(new Object[] { id, nombre, precio, stock });
+    private void cargarProductos(String productoActual) {
+        ProductosBO productosBO = new ProductosBO();
+        try {
+            List<ProductoDTO> productos = productosBO.obtenerTodosLosProductos();
+            for (ProductoDTO dto : productos) {
+                if (!dto.getNombre().equalsIgnoreCase(productoActual)) {
+                    modelo.addRow(new Object[] {
+                            dto.getId(),
+                            dto.getNombre(),
+                            dto.getPrecio(),
+                            dto.getCanDes(),
+                            dto.getStock()
+                    });
+                }
+            }
+        } catch (NegociosException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar productos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public Producto getProductoSeleccionado() {
         return productoSeleccionado;
     }
 
+    // Clase interna para transportar datos seleccionados
     public static class Producto {
-        String id, nombre, precio, stock;
-
-        public Producto(String id, String nombre, String precio, String stock) {
-            this.id = id;
-            this.nombre = nombre;
-            this.precio = precio;
-            this.stock = stock;
-        }
+        public Long id;
+        public String nombre;
+        public float precio;
+        public int canDes;
+        public int stock;
     }
 }

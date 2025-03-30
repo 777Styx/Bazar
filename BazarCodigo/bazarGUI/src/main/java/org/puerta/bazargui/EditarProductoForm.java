@@ -31,12 +31,12 @@ public class EditarProductoForm extends JFrame {
 
         add(new HeaderPanel(this, HeaderPanel.SeccionActual.INVENTARIO), BorderLayout.NORTH);
 
-        modelo = new DefaultTableModel(new Object[]{
+        modelo = new DefaultTableModel(new Object[] {
                 "ID", "Descuento (%)", "Nombre", "Precio", "Stock", "Proveedor", "Eliminar"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0 && column != 6; // Solo columnas editables excepto ID y eliminar
+                return column != 0 && column != 6;
             }
         };
 
@@ -46,7 +46,7 @@ public class EditarProductoForm extends JFrame {
         tablaProductos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                    boolean isSelected, boolean hasFocus, int row, int column) {
                 if (value instanceof ImageIcon) {
                     JLabel label = new JLabel((ImageIcon) value);
                     label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -62,14 +62,14 @@ public class EditarProductoForm extends JFrame {
                 int fila = tablaProductos.rowAtPoint(evt.getPoint());
                 int columna = tablaProductos.columnAtPoint(evt.getPoint());
 
-                if (columna == 5) { // Proveedor
+                if (columna == 5) {
                     SeleccionarProveedorDialog dialog = new SeleccionarProveedorDialog();
                     ProveedorDTO proveedor = dialog.getProveedorSeleccionado();
                     if (proveedor != null) {
                         modelo.setValueAt(proveedor.getNombre(), fila, columna);
                         tablaProductos.putClientProperty("proveedor_" + fila, proveedor);
                     }
-                } else if (columna == 6) { // Eliminar
+                } else if (columna == 6) {
                     int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar este producto?", "Confirmar",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
@@ -95,9 +95,10 @@ public class EditarProductoForm extends JFrame {
             String nombreProveedor = "Desconocido";
             try {
                 nombreProveedor = new ProveedoresBO().obtenerProveedorPorId(producto.getProveedorId()).getNombre();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
-            modelo.addRow(new Object[]{
+            modelo.addRow(new Object[] {
                     producto.getId(),
                     producto.getCanDes(),
                     producto.getNombre(),

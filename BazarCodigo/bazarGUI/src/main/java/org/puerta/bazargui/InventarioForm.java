@@ -42,7 +42,7 @@ public class InventarioForm extends JFrame {
                         "Eliminar" }) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // ninguna celda editable directamente
+                return false;
             }
         };
 
@@ -65,14 +65,15 @@ public class InventarioForm extends JFrame {
         for (ProductoDTO dto : productos) {
             modelo.addRow(new Object[] {
                     dto.getId(),
+                    dto.getCanDes() + "%",
                     dto.getNombre(),
                     "$" + dto.getPrecio(),
                     dto.getStock(),
-                    "$" + dto.getCanDes(),
                     dto.getNombreProveedor(),
                     escalarIcono("resources/editar.png", 20, 20),
                     escalarIcono("resources/delete.png", 20, 20)
             });
+
         }
 
         // Agregar listener para editar o eliminar
@@ -94,7 +95,7 @@ public class InventarioForm extends JFrame {
                     }
                     new EditarProductoForm(producto).setVisible(true);
                     dispose();
-                } else if (columna == 7) { // Eliminar
+                } else if (columna == 7) {
                     int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar este producto?", "Confirmar",
                             JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
@@ -108,7 +109,7 @@ public class InventarioForm extends JFrame {
                             ProductosBO productosBO = new ProductosBO();
                             productosBO.borrarProducto(idProducto);
 
-                            modelo.removeRow(fila); // Eliminar de la tabla solo si se eliminó en BD
+                            modelo.removeRow(fila);
                             JOptionPane.showMessageDialog(null, "Producto eliminado correctamente.");
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null,

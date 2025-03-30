@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.puerta.bazardependecias.dto.DetalleDTO;
+import org.puerta.bazardependecias.dto.VentaDTO;
+
 import resources.RoundedButton;
 
 import java.awt.*;
@@ -18,7 +21,11 @@ public class DetalleForm extends JFrame {
     private DefaultTableModel modelo;
     private static final int COL_EDITAR = 5;
 
-    public DetalleForm() {
+    private VentaDTO ventaDTO;
+
+    public DetalleForm(VentaDTO ventaDTO) {
+        this.ventaDTO = ventaDTO;
+
         setTitle("Detalle de Venta");
         setSize(900, 500);
         setLocationRelativeTo(null);
@@ -36,7 +43,7 @@ public class DetalleForm extends JFrame {
         add(header, BorderLayout.NORTH);
 
         // TABLA
-        String[] columnas = { "Producto", "Precio", "Cantidad", "Descuento %", "Importe", "Editar", "Eliminar" };
+        String[] columnas = { "Producto", "Precio", "Cantidad", "Descuento %", "Importe", "Editar" };
         modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -67,14 +74,29 @@ public class DetalleForm extends JFrame {
 
         // ICONOS
         ImageIcon iconEditar = escalarIcono("resources/editar.png", 20, 20);
-        ImageIcon iconEliminar = escalarIcono("resources/delete.png", 20, 20);
 
-        // DATOS DE EJEMPLO
-        modelo.addRow(new Object[] {
-                "Camisa Verano", "$200", "2", "0", "$400",
-                iconEditar,
-                iconEliminar
-        });
+        // Cargar los detalles en la tabla
+
+        try {
+            for (DetalleDTO detalle : ventaDTO.getDetalles()) {
+                float precio = detalle.getPrecio();
+                int cantidad = detalle.getCantidad();
+                int descuento = detalle.getCanDes();
+                float importeConDescuento = (precio * cantidad) * (1 - descuento / 100f);
+
+                modelo.addRow(new Object[] {
+                        detalle.getNombreProducto(),
+                        "$" + detalle.getPrecio(),
+                        detalle.getCantidad(),
+                        detalle.getCanDes(),
+                        String.format("$%.2f", importeConDescuento),
+                        escalarIcono("resources/editar.png", 20, 20)
+                });
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage());
+        }
 
         // Listener para editar
         tablaDetalle.addMouseListener(new MouseAdapter() {
@@ -83,9 +105,11 @@ public class DetalleForm extends JFrame {
                 int columna = tablaDetalle.columnAtPoint(e.getPoint());
 
                 if (columna == COL_EDITAR) {
-                    // Llama a EditarDetalleForm
-                    new EditarDetalleForm();
+                    DetalleDTO detalleSeleccionado = ventaDTO.getDetalles().get(fila);
+                    dispose();
+                    new EditarDetalleForm(detalleSeleccionado, ventaDTO);
                 }
+
             }
         });
 
@@ -95,7 +119,6 @@ public class DetalleForm extends JFrame {
         btnSalir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Abrir VentaForm y cerrar la ventana actual
                 new VentaForm();
                 dispose();
             }
@@ -117,7 +140,4 @@ public class DetalleForm extends JFrame {
         return new ImageIcon(imagen);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(DetalleForm::new);
-    }
 }

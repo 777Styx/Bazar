@@ -1,13 +1,24 @@
 package org.puerta.bazargui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 
+import org.puerta.bazardependecias.dto.DetalleDTO;
+import org.puerta.bazardependecias.dto.UsuarioDTO;
+import org.puerta.bazardependecias.dto.VentaDTO;
+import org.puerta.bazarnegocio.bo.VentasBO;
+import java.awt.event.MouseEvent;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import resources.HeaderPanel;
 import resources.RoundedButton;
+import resources.Sesion;
 
 public class RegistrarVentaForm extends JFrame {
 
@@ -41,26 +52,85 @@ public class RegistrarVentaForm extends JFrame {
         // ACCIÓN DE BOTÓN
         btnAgregarProductos.addActionListener(_ -> {
             AgregarProductosDialog dialog = new AgregarProductosDialog(this);
-            List<AgregarProductosDialog.Producto> seleccionados = dialog.obtenerSeleccionados();
+            List<Object[]> seleccionados = dialog.obtenerSeleccionados();
+            for (Object[] datos : seleccionados) {
+                Long id = Long.parseLong(datos[0].toString());
+                String nombre = datos[1].toString();
+                float precio = Float.parseFloat(datos[2].toString());
+                int stock = Integer.parseInt(datos[3].toString());
+                int canDes = Integer.parseInt(datos[4].toString());
 
-            for (AgregarProductosDialog.Producto p : seleccionados) {
+                ImageIcon iconoBorrar = new ImageIcon(getClass().getClassLoader().getResource("resources/delete.png"));
                 modelo.addRow(new Object[] {
-                        new ImageIcon(getClass().getClassLoader().getResource("resources/delete.png")),
-                        p.id,
-                        p.nombre,
-                        p.precio,
+                        iconoBorrar,
+                        id,
+                        nombre,
+                        precio,
                         "",
-                        "",
-                        p.precio
+                        canDes,
+                        ""
                 });
+
             }
         });
 
         // TABLA
-        String[] columnas = { "Borrar", "Artículo #", "Nombre", "Precio", "Cantidad", "Desc %", "Total" };
-        modelo = new DefaultTableModel(columnas, 0);
+        String[] columnas = { "Borrar", "Artículo #", "Nombre", "Precio", "Cantidad", "Desc %",
+                "Total(Descuento incluido)" };
+        modelo = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 4;
+            }
+        };
+
+        modelo.addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int col = e.getColumn();
+            if (col == 4) {
+                try {
+                    int cantidad = Integer.parseInt(modelo.getValueAt(row, 4).toString());
+                    float precio = Float.parseFloat(modelo.getValueAt(row, 3).toString());
+                    int descuento = Integer.parseInt(modelo.getValueAt(row, 5).toString());
+                    int stock = obtenerStockDeProducto(row);
+
+                    if (cantidad > stock) {
+                        JOptionPane.showMessageDialog(null, "Cantidad excede el stock disponible.");
+                        modelo.setValueAt("", row, 4);
+                        modelo.setValueAt("", row, 6);
+                    } else {
+                        float totalProducto = (precio * cantidad) * (1 - descuento / 100f);
+                        modelo.setValueAt(String.format("%.2f", totalProducto), row, 6);
+                        actualizarTotal();
+                    }
+
+                } catch (Exception ignored) {
+                }
+            }
+        });
+
         tablaVenta = new JTable(modelo);
+        tablaVenta.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
+
         tablaVenta.setRowHeight(40);
+        tablaVenta.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tablaVenta.rowAtPoint(e.getPoint());
+                int columna = tablaVenta.columnAtPoint(e.getPoint());
+
+                if (columna == 0) {
+                    int confirm = JOptionPane.showConfirmDialog(null,
+                            "¿Desea eliminar este producto de la venta?", "Confirmar",
+                            JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        modelo.removeRow(fila);
+                        actualizarTotal();
+                    }
+                }
+            }
+        });
+
         JScrollPane scrollPane = new JScrollPane(tablaVenta);
         add(scrollPane, BorderLayout.CENTER);
 
@@ -78,11 +148,77 @@ public class RegistrarVentaForm extends JFrame {
         RoundedButton btnConfirmar = new RoundedButton("Confirmar");
 
         btnConfirmar.addActionListener(_ -> {
-            // lógica para confirmar la venta
-            VentaForm ventaForm = new VentaForm();
-            ventaForm.setVisible(true);
-            dispose();
+            try {
+                if (modelo.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(this, "Debe agregar al menos un producto.");
+                    return;
+                }
+
+                float total = 0f;
+                float totalDescuento = 0f;
+                List<DetalleDTO> detalles = new ArrayList<>();
+
+                for (int i = 0; i < modelo.getRowCount(); i++) {
+                    Long productoId = Long.parseLong(modelo.getValueAt(i, 1).toString());
+                    String nombre = modelo.getValueAt(i, 2).toString();
+                    float precio = Float.parseFloat(modelo.getValueAt(i, 3).toString());
+
+                    String cantidadStr = modelo.getValueAt(i, 4).toString();
+                    String canDesStr = modelo.getValueAt(i, 5).toString();
+
+                    if (!cantidadStr.matches("\\d+") || !canDesStr.matches("\\d+")) {
+                        JOptionPane.showMessageDialog(this,
+                                "La cantidad y el descuento deben ser números válidos. Fila " + (i + 1));
+                        return;
+                    }
+
+                    int cantidad = Integer.parseInt(cantidadStr);
+                    int canDes = Integer.parseInt(canDesStr);
+                    if (cantidad <= 0 || canDes < 0 || canDes > 100) {
+                        JOptionPane.showMessageDialog(this, "Cantidad o descuento inválido. Fila " + (i + 1));
+                        return;
+                    }
+
+                    float importe = precio * cantidad;
+                    float descuento = importe * canDes / 100f;
+
+                    total += importe;
+                    totalDescuento += descuento;
+
+                    DetalleDTO detalle = new DetalleDTO();
+                    detalle.setProductoId(productoId);
+                    detalle.setCantidad(cantidad);
+                    detalle.setPrecio(precio);
+                    detalle.setCanDes(canDes);
+                    detalle.setImporte(importe);
+                    detalles.add(detalle);
+                }
+
+                UsuarioDTO usuario = Sesion.getUsuarioActual();
+
+                if (usuario == null) {
+                    JOptionPane.showMessageDialog(this, "No hay un usuario logueado. No se puede registrar la venta.");
+                    return;
+                }
+
+                VentaDTO ventaDTO = new VentaDTO();
+                ventaDTO.setFecha(new Date());
+                ventaDTO.setTotal(total - totalDescuento);
+                ventaDTO.setTotalDescuento(totalDescuento);
+                ventaDTO.setUsuarioId(usuario.getId());
+                ventaDTO.setDetalles(detalles);
+
+                new VentasBO().registrarVenta(ventaDTO);
+
+                JOptionPane.showMessageDialog(this, "Venta registrada exitosamente.");
+                new VentaForm().setVisible(true);
+                dispose();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al registrar venta: " + ex.getMessage());
+            }
         });
+
         RoundedButton btnCancelar = new RoundedButton("Cancelar Venta");
 
         btnCancelar.addActionListener(_ -> {
@@ -105,6 +241,38 @@ public class RegistrarVentaForm extends JFrame {
         add(panelDerecho, BorderLayout.EAST);
 
         setVisible(true);
+    }
+
+    private void actualizarTotal() {
+        float total = 0f;
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            try {
+                total += Float.parseFloat(modelo.getValueAt(i, 6).toString());
+            } catch (Exception ignored) {
+            }
+        }
+        lblTotal.setText(String.format("$%.2f", total));
+    }
+
+    private class IconCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof Icon) {
+                JLabel label = new JLabel((Icon) value);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                return label;
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+    }
+
+    private int obtenerStockDeProducto(int fila) {
+        try {
+            return Integer.parseInt(modelo.getValueAt(fila, 3 + 1).toString());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public static void main(String[] args) {

@@ -29,6 +29,6 @@ public class RoundedButton extends JButton {
 
     @Override
     protected void paintBorder(Graphics g) {
-        // No border
+        
     }
 }

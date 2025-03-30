@@ -14,6 +14,10 @@ public class RoundedPasswordField extends JPasswordField {
         this.radius = 15;
     }
 
+    public RoundedPasswordField() {
+        this(15);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

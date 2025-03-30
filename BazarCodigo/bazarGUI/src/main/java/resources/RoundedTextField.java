@@ -10,6 +10,10 @@ public class RoundedTextField extends JTextField {
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
     }
 
+    public RoundedTextField() {
+        this(15);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

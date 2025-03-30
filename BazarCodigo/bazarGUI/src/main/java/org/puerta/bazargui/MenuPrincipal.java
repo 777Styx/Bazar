@@ -34,7 +34,7 @@ public class MenuPrincipal extends JFrame {
         grid.add(crearBoton("resources/venta.png", "Venta"));
         grid.add(crearBoton("resources/inventario.png", "Inventario"));
         grid.add(crearBoton("resources/proveedores.png", "Proveedores"));
-        grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
+        grid.add(crearBoton("resources/user.png", "Usuarios"));
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
         grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
@@ -47,7 +47,7 @@ public class MenuPrincipal extends JFrame {
     // Método para crear un panel que actúa como botón
     private JPanel crearBoton(String rutaImagen, String texto) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(new Color(0, 169, 178)); // Color cyan
+        panel.setBackground(new Color(0, 169, 178));
         panel.setPreferredSize(new Dimension(180, 200));
 
         JLabel icono = new JLabel(escalarIcono(rutaImagen, 80, 80));
@@ -61,7 +61,6 @@ public class MenuPrincipal extends JFrame {
         panel.add(icono, BorderLayout.CENTER);
         panel.add(etiqueta, BorderLayout.SOUTH);
 
-        // Acción: Redirecciona según el texto
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -85,6 +84,11 @@ public class MenuPrincipal extends JFrame {
                 break;
             case "proveedores":
                 new ProveedoresForm().setVisible(true);
+                dispose();
+                break;
+            case "usuarios":
+                UsuariosForm reg = new UsuariosForm();
+                reg.setVisible(true);
                 dispose();
                 break;
             default:
