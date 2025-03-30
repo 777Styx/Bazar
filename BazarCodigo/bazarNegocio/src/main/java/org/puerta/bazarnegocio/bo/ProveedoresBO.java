@@ -51,4 +51,23 @@ public class ProveedoresBO {
             throw new NegociosException("Error al obtener todos los proveedores", e);
         }
     }
+
+    public ProveedorDTO encontrarPorNombre(String nombre) throws NegociosException {
+        ProveedoresDAO dao = new ProveedoresDAO();
+        Proveedor entidad = dao.findByNombre(nombre);
+    
+        if (entidad == null) {
+            throw new NegociosException("Proveedor no encontrado");
+        }
+    
+        ProveedorDTO dto = new ProveedorDTO();
+        dto.setId(entidad.getId());
+        dto.setNombre(entidad.getNombre());
+        dto.setCorreo(entidad.getCorreo());
+        dto.setTelefono(entidad.getTelefono());
+        dto.setDireccion(entidad.getDireccion());
+        dto.setRepresentante(entidad.getRepresentante());
+        return dto;
+    }
+    
 }

@@ -5,6 +5,7 @@
 package org.puerta.bazarpersistencia.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
 import org.puerta.bazarpersistencia.dominio.Proveedor;
@@ -88,4 +89,16 @@ public class ProveedoresDAO {
             em.close();
         }
     }
+
+    public Proveedor findByNombre(String nombre) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Proveedor p WHERE p.nombre = :nombre", Proveedor.class)
+                    .setParameter("nombre", nombre)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }

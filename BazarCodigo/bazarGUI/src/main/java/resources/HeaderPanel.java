@@ -21,7 +21,7 @@ public class HeaderPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(30, 33, 43));
 
-        JLabel lblTitulo = new JLabel("  Bazar");
+        JLabel lblTitulo = new JLabel("  Bazar Esthela");
         lblTitulo.setForeground(Color.WHITE);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 16));
         add(lblTitulo, BorderLayout.WEST);

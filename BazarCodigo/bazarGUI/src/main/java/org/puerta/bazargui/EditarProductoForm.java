@@ -3,17 +3,26 @@ package org.puerta.bazargui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+
+import org.puerta.bazardependecias.dto.ProductoDTO;
+import org.puerta.bazardependecias.dto.ProveedorDTO;
+import org.puerta.bazarnegocio.bo.ProductosBO;
+import org.puerta.bazarnegocio.bo.ProveedoresBO;
 
 import resources.HeaderPanel;
 import resources.RoundedButton;
+
+import java.awt.*;
+import java.awt.event.*;
 
 public class EditarProductoForm extends JFrame {
 
     private JTable tablaProductos;
     private DefaultTableModel modelo;
+    private ProductoDTO producto;
 
-    public EditarProductoForm() {
+    public EditarProductoForm(ProductoDTO producto) {
+        this.producto = producto;
         setTitle("Editar Producto");
         setSize(1100, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -22,12 +31,18 @@ public class EditarProductoForm extends JFrame {
 
         add(new HeaderPanel(this, HeaderPanel.SeccionActual.INVENTARIO), BorderLayout.NORTH);
 
-        // TABLA
-        String[] columnas = { "Artículo#", "Nombre", "Precio", "Stock", "Proveedor", "Costo de Compra", "Eliminar" };
-        modelo = new DefaultTableModel(columnas, 0);
-        tablaProductos = new JTable(modelo);
+        modelo = new DefaultTableModel(new Object[]{
+                "ID", "Descuento (%)", "Nombre", "Precio", "Stock", "Proveedor", "Eliminar"
+        }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column != 0 && column != 6; // Solo columnas editables excepto ID y eliminar
+            }
+        };
 
+        tablaProductos = new JTable(modelo);
         tablaProductos.setRowHeight(40);
+
         tablaProductos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -41,28 +56,143 @@ public class EditarProductoForm extends JFrame {
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(tablaProductos);
-        add(scrollPane, BorderLayout.CENTER);
+        tablaProductos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int fila = tablaProductos.rowAtPoint(evt.getPoint());
+                int columna = tablaProductos.columnAtPoint(evt.getPoint());
 
-        // PANEL DERECHO
+                if (columna == 5) { // Proveedor
+                    SeleccionarProveedorDialog dialog = new SeleccionarProveedorDialog();
+                    ProveedorDTO proveedor = dialog.getProveedorSeleccionado();
+                    if (proveedor != null) {
+                        modelo.setValueAt(proveedor.getNombre(), fila, columna);
+                        tablaProductos.putClientProperty("proveedor_" + fila, proveedor);
+                    }
+                } else if (columna == 6) { // Eliminar
+                    int confirm = JOptionPane.showConfirmDialog(null, "¿Eliminar este producto?", "Confirmar",
+                            JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        try {
+                            Long id = Long.parseLong(modelo.getValueAt(fila, 0).toString());
+                            new ProductosBO().borrarProducto(id);
+                            modelo.removeRow(fila);
+                            JOptionPane.showMessageDialog(null, "Producto eliminado.");
+                            new InventarioForm().setVisible(true);
+                            dispose();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error al eliminar: " + ex.getMessage());
+                        }
+                    }
+                }
+            }
+        });
+
+        add(new JScrollPane(tablaProductos), BorderLayout.CENTER);
+
+        // Cargar el producto
+        try {
+            String nombreProveedor = "Desconocido";
+            try {
+                nombreProveedor = new ProveedoresBO().obtenerProveedorPorId(producto.getProveedorId()).getNombre();
+            } catch (Exception ignored) {}
+
+            modelo.addRow(new Object[]{
+                    producto.getId(),
+                    producto.getCanDes(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getStock(),
+                    nombreProveedor,
+                    escalarIcono("resources/delete.png", 18, 18)
+            });
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar producto: " + e.getMessage());
+        }
+
+        // BOTONES
         RoundedButton btnGuardar = new RoundedButton("Guardar Cambios");
         RoundedButton btnCancelar = new RoundedButton("Cancelar");
 
-        btnGuardar.setPreferredSize(new Dimension(150, 40));
-        btnCancelar.setPreferredSize(new Dimension(150, 40));
-        btnCancelar.setBackground(Color.DARK_GRAY);
-        btnCancelar.setForeground(Color.WHITE);
-
         btnGuardar.addActionListener(_ -> {
-            JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.");
-            new InventarioForm();
-            dispose();
+            try {
+                int fila = 0;
+
+                String nombre = modelo.getValueAt(fila, 2).toString().trim();
+                String precioStr = modelo.getValueAt(fila, 3).toString().trim();
+                String stockStr = modelo.getValueAt(fila, 4).toString().trim();
+                String canDesStr = modelo.getValueAt(fila, 1).toString().trim();
+
+                // Validaciones
+                if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+                    JOptionPane.showMessageDialog(null, "Nombre inválido.");
+                    return;
+                }
+
+                if (!precioStr.matches("^\\d+(\\.\\d{1,2})?$")) {
+                    JOptionPane.showMessageDialog(null, "Precio inválido.");
+                    return;
+                }
+
+                if (!stockStr.matches("^\\d+$")) {
+                    JOptionPane.showMessageDialog(null, "Stock inválido.");
+                    return;
+                }
+
+                if (!canDesStr.matches("^\\d+$")) {
+                    JOptionPane.showMessageDialog(null, "Descuento inválido.");
+                    return;
+                }
+
+                int canDes = Integer.parseInt(canDesStr);
+                if (canDes < 0 || canDes > 100) {
+                    JOptionPane.showMessageDialog(null, "El descuento debe estar entre 0 y 100.");
+                    return;
+                }
+
+                // Obtener proveedor seleccionado
+                ProveedorDTO proveedor = (ProveedorDTO) tablaProductos.getClientProperty("proveedor_" + fila);
+                if (proveedor == null) {
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar un proveedor para el producto.");
+                    return;
+                }
+
+                // Verifica cambios
+                boolean huboCambios = !producto.getNombre().equals(nombre)
+                        || producto.getPrecio() != Float.parseFloat(precioStr)
+                        || producto.getStock() != Integer.parseInt(stockStr)
+                        || producto.getCanDes() != canDes
+                        || !producto.getProveedorId().equals(proveedor.getId());
+
+                if (!huboCambios) {
+                    JOptionPane.showMessageDialog(null, "No se detectaron cambios.");
+                    return;
+                }
+
+                // Actualiza DTO
+                producto.setNombre(nombre);
+                producto.setPrecio(Float.parseFloat(precioStr));
+                producto.setStock(Integer.parseInt(stockStr));
+                producto.setCanDes(canDes);
+                producto.setProveedorId(proveedor.getId());
+
+                new ProductosBO().actualizarProducto(producto);
+
+                JOptionPane.showMessageDialog(null, "Producto actualizado correctamente.");
+                new InventarioForm().setVisible(true);
+                dispose();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar: " + ex.getMessage());
+            }
         });
 
         btnCancelar.addActionListener(_ -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Cancelar los cambios?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Cancelar los cambios?", "Confirmar",
+                    JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                new InventarioForm();
+                new InventarioForm().setVisible(true);
                 dispose();
             }
         });
@@ -81,11 +211,6 @@ public class EditarProductoForm extends JFrame {
 
         add(panelDerecho, BorderLayout.EAST);
 
-        // Fila de ejemplo
-        modelo.addRow(new Object[] {
-                "182", "Zapatos Negros", "$300", "12", "Nike", "$200", escalarIcono("resources/delete.png", 18, 18)
-        });
-
         setVisible(true);
     }
 
@@ -98,9 +223,5 @@ public class EditarProductoForm extends JFrame {
         ImageIcon icono = new ImageIcon(url);
         Image imagen = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         return new ImageIcon(imagen);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(EditarProductoForm::new);
     }
 }
