@@ -31,7 +31,7 @@ public class MenuPrincipal extends JFrame {
         grid.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         grid.setBackground(Color.WHITE);
 
-        grid.add(crearBoton("resources/venta.png", "Venta"));
+        grid.add(crearBoton("resources/venta.png", "Ventas"));
         grid.add(crearBoton("resources/inventario.png", "Inventario"));
         grid.add(crearBoton("resources/proveedores.png", "Proveedores"));
         grid.add(crearBoton("resources/user.png", "Usuarios"));
@@ -74,7 +74,7 @@ public class MenuPrincipal extends JFrame {
     // Redirecciona a las pantallas correspondientes según la opción
     private void redireccionar(String opcion) {
         switch (opcion.toLowerCase()) {
-            case "venta":
+            case "ventas":
                 new VentaForm().setVisible(true);
                 dispose();
                 break;

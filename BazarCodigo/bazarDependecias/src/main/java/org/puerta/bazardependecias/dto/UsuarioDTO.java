@@ -3,6 +3,7 @@ package org.puerta.bazardependecias.dto;
 public class UsuarioDTO {
     private Long id;
     private String nombre;
+
     // No incluimos la contraseña por seguridad en el DTO
 
     // Constructores
