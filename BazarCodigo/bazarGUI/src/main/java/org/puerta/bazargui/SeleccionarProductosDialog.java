@@ -28,7 +28,7 @@ public class SeleccionarProductosDialog extends JDialog {
 
         JButton btnCerrar = new JButton("X");
         btnCerrar.setFocusable(false);
-        btnCerrar.addActionListener(_ -> dispose());
+        btnCerrar.addActionListener(e -> dispose());
         topPanel.add(btnCerrar, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
@@ -64,7 +64,7 @@ public class SeleccionarProductosDialog extends JDialog {
         JButton btnAgregar = new JButton("Agregar");
         btnAgregar.setBackground(Color.BLACK);
         btnAgregar.setForeground(Color.WHITE);
-        btnAgregar.addActionListener(_ -> {
+        btnAgregar.addActionListener(e -> {
             productosSeleccionados.clear();
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 Boolean seleccionado = (Boolean) modelo.getValueAt(i, 0);

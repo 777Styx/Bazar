@@ -63,7 +63,7 @@ public class EditarProveedorForm extends JFrame {
 
         // BOTONES
         RoundedButton btnGuardar = new RoundedButton("Guardar");
-        btnGuardar.addActionListener(_ -> {
+        btnGuardar.addActionListener(_e -> {
             String nombre = txtNombre.getText().trim();
             String representante = txtRepresentante.getText().trim();
             String correo = txtCorreo.getText().trim();
@@ -130,7 +130,7 @@ public class EditarProveedorForm extends JFrame {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
 
-        btnCancelar.addActionListener(_ -> {
+        btnCancelar.addActionListener(e -> {
             int respuesta = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea cancelar?", "Cancelar",
                     JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {

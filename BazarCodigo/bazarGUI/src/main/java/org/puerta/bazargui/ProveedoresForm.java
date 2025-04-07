@@ -69,7 +69,7 @@ public class ProveedoresForm extends JFrame {
         });
 
         // Íconos
-        ImageIcon iconEditar = escalarIcono("resources/editar.png", 20, 20);
+        ImageIcon iconEditar = escalarIcono("editar.png", 20, 20);
 
         // Cargar
 
@@ -85,7 +85,7 @@ public class ProveedoresForm extends JFrame {
                         p.getNombre(),
                         p.getRepresentante(),
                         p.getTelefono(),
-                        escalarIcono("resources/editar.png", 20, 20)
+                        escalarIcono("editar.png", 20, 20)
                 });
             }
         } catch (Exception e) {
@@ -121,13 +121,13 @@ public class ProveedoresForm extends JFrame {
 
         // BOTÓN REGISTRAR
         RoundedButton btnRegistrar = new RoundedButton("Registrar Proveedor");
-        btnRegistrar.setIcon(escalarIcono("resources/more.png", 20, 20));
+        btnRegistrar.setIcon(escalarIcono("more.png", 20, 20));
         btnRegistrar.setHorizontalTextPosition(SwingConstants.CENTER);
         btnRegistrar.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnRegistrar.setPreferredSize(new Dimension(150, 60));
         btnRegistrar.setBackground(Color.WHITE);
         btnRegistrar.setForeground(Color.BLACK);
-        btnRegistrar.addActionListener(_ -> {
+        btnRegistrar.addActionListener(e -> {
             new RegistrarProveedorForm();
             dispose();
         });

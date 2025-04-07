@@ -50,7 +50,7 @@ public class RegistrarVentaForm extends JFrame {
         add(panelSuperior, BorderLayout.NORTH);
 
         // ACCIÓN DE BOTÓN
-        btnAgregarProductos.addActionListener(_ -> {
+        btnAgregarProductos.addActionListener(e -> {
             AgregarProductosDialog dialog = new AgregarProductosDialog(this);
             List<Object[]> seleccionados = dialog.obtenerSeleccionados();
             for (Object[] datos : seleccionados) {
@@ -60,7 +60,7 @@ public class RegistrarVentaForm extends JFrame {
                 int stock = Integer.parseInt(datos[3].toString());
                 int canDes = Integer.parseInt(datos[4].toString());
 
-                ImageIcon iconoBorrar = new ImageIcon(getClass().getClassLoader().getResource("resources/delete.png"));
+                ImageIcon iconoBorrar = new ImageIcon(getClass().getClassLoader().getResource("delete.png"));
                 modelo.addRow(new Object[] {
                         iconoBorrar,
                         id,
@@ -147,7 +147,7 @@ public class RegistrarVentaForm extends JFrame {
 
         RoundedButton btnConfirmar = new RoundedButton("Confirmar");
 
-        btnConfirmar.addActionListener(_ -> {
+        btnConfirmar.addActionListener(e -> {
             try {
                 if (modelo.getRowCount() == 0) {
                     JOptionPane.showMessageDialog(this, "Debe agregar al menos un producto.");
@@ -221,7 +221,7 @@ public class RegistrarVentaForm extends JFrame {
 
         RoundedButton btnCancelar = new RoundedButton("Cancelar Venta");
 
-        btnCancelar.addActionListener(_ -> {
+        btnCancelar.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de cancelar la venta?", "Confirmar",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {

@@ -145,7 +145,7 @@ public class EditarDetalleForm extends JFrame {
                 cantidad,
                 descuento1,
                 String.format("$%.2f", importeConDescuento),
-                escalarIcono("resources/editar.png", 20, 20)
+                escalarIcono("editar.png", 20, 20)
         });
 
         // Botones
@@ -153,7 +153,7 @@ public class EditarDetalleForm extends JFrame {
         RoundedButton btnSalir = new RoundedButton("Salir");
 
         btnConfirmar.setPreferredSize(new Dimension(120, 40));
-        btnConfirmar.addActionListener(_ -> {
+        btnConfirmar.addActionListener(e -> {
             try {
                 int fila = 0;
                 String nombreNuevo = modelo.getValueAt(fila, 0).toString();
@@ -243,7 +243,7 @@ public class EditarDetalleForm extends JFrame {
         btnSalir.setPreferredSize(new Dimension(120, 40));
         btnSalir.setBackground(Color.DARK_GRAY);
         btnSalir.setForeground(Color.WHITE);
-        btnSalir.addActionListener(_ -> {
+        btnSalir.addActionListener(e -> {
             dispose();
             new VentaForm().setVisible(true);
         });

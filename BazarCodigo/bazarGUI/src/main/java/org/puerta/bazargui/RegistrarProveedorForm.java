@@ -61,7 +61,7 @@ public class RegistrarProveedorForm extends JFrame {
         RoundedButton btnCancelar = new RoundedButton("Cancelar");
 
         btnConfirmar.setPreferredSize(new Dimension(140, 40));
-        btnConfirmar.addActionListener(_ -> {
+        btnConfirmar.addActionListener(e -> {
             String nombre = txtNombre.getText().trim();
             String representante = txtRepresentante.getText().trim();
             String telefono = txtTelefono.getText().trim();
@@ -118,6 +118,8 @@ public class RegistrarProveedorForm extends JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al registrar proveedor: " + ex.getMessage(), "Error",
                         JOptionPane.ERROR_MESSAGE);
+                  new ProveedoresForm().setVisible(true);
+                 dispose();
             }
         });
 
@@ -129,21 +131,8 @@ public class RegistrarProveedorForm extends JFrame {
         botones.add(btnCancelar);
         add(botones, BorderLayout.SOUTH);
 
-        // Acciones
-        btnCancelar.addActionListener(_ -> {
-            ProveedoresForm proveedoresForm = new ProveedoresForm();
-            proveedoresForm.setVisible(true);
-            dispose();
-        });
-
-        btnConfirmar.addActionListener(_ -> {
-            JOptionPane.showMessageDialog(this,
-                    "Proveedor registrado correctamente.",
-                    "Confirmación",
-                    JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-        });
-
+      
+      
         setVisible(true);
     }
 

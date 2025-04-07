@@ -102,13 +102,13 @@ public class VentaForm extends JFrame {
         // Panel lateral con botón Agregar venta
         RoundedButton btnAgregarVenta = new RoundedButton("Agregar venta");
         btnAgregarVenta.setPreferredSize(new Dimension(150, 60));
-        btnAgregarVenta.setIcon(escalarIcono("resources/more.png", 24, 24));
+        btnAgregarVenta.setIcon(escalarIcono("more.png", 24, 24));
         btnAgregarVenta.setHorizontalTextPosition(SwingConstants.CENTER);
         btnAgregarVenta.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnAgregarVenta.setBackground(Color.WHITE);
         btnAgregarVenta.setForeground(Color.BLACK);
 
-        btnAgregarVenta.addActionListener(_ -> {
+        btnAgregarVenta.addActionListener(e -> {
             RegistrarVentaForm registrar = new RegistrarVentaForm();
             registrar.setVisible(true);
             dispose();
@@ -168,8 +168,8 @@ public class VentaForm extends JFrame {
     private static final int ELIMINAR_COL_INDEX = 6;
 
     private class IconCellRenderer extends DefaultTableCellRenderer {
-        private final ImageIcon detalleIcon = escalarIcono("resources/detalle.png", 16, 16);
-        private final ImageIcon eliminarIcon = escalarIcono("resources/delete.png", 16, 16);
+        private final ImageIcon detalleIcon = escalarIcono("detalle.png", 16, 16);
+        private final ImageIcon eliminarIcon = escalarIcono("delete.png", 16, 16);
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,

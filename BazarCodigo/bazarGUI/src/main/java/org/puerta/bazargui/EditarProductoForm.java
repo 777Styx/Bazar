@@ -105,7 +105,7 @@ public class EditarProductoForm extends JFrame {
                     producto.getPrecio(),
                     producto.getStock(),
                     nombreProveedor,
-                    escalarIcono("resources/delete.png", 18, 18)
+                    escalarIcono("delete.png", 18, 18)
             });
 
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class EditarProductoForm extends JFrame {
         RoundedButton btnGuardar = new RoundedButton("Guardar Cambios");
         RoundedButton btnCancelar = new RoundedButton("Cancelar");
 
-        btnGuardar.addActionListener(_ -> {
+        btnGuardar.addActionListener(e -> {
             try {
                 int fila = 0;
 
@@ -189,7 +189,7 @@ public class EditarProductoForm extends JFrame {
             }
         });
 
-        btnCancelar.addActionListener(_ -> {
+        btnCancelar.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "¿Cancelar los cambios?", "Confirmar",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {

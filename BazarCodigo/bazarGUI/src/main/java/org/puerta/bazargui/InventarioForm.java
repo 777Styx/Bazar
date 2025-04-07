@@ -70,8 +70,8 @@ public class InventarioForm extends JFrame {
                     "$" + dto.getPrecio(),
                     dto.getStock(),
                     dto.getNombreProveedor(),
-                    escalarIcono("resources/editar.png", 20, 20),
-                    escalarIcono("resources/delete.png", 20, 20)
+                    escalarIcono("editar.png", 20, 20),
+                    escalarIcono("delete.png", 20, 20)
             });
 
         }
@@ -126,13 +126,13 @@ public class InventarioForm extends JFrame {
 
         // PANEL LATERAL: Botón para Registrar Producto
         RoundedButton btnRegistrarProducto = new RoundedButton("Registrar producto");
-        btnRegistrarProducto.setIcon(escalarIcono("resources/more.png", 20, 20));
+        btnRegistrarProducto.setIcon(escalarIcono("more.png", 20, 20));
         btnRegistrarProducto.setHorizontalTextPosition(SwingConstants.CENTER);
         btnRegistrarProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnRegistrarProducto.setPreferredSize(new Dimension(150, 60));
         btnRegistrarProducto.setBackground(Color.WHITE);
         btnRegistrarProducto.setForeground(Color.BLACK);
-        btnRegistrarProducto.addActionListener(_ -> {
+        btnRegistrarProducto.addActionListener(_e -> {
             new RegistrarProductoForm().setVisible(true);
             dispose();
         });

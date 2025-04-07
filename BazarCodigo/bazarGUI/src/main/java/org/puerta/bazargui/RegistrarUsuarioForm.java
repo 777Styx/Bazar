@@ -47,15 +47,15 @@ public class RegistrarUsuarioForm extends JFrame {
         add(panelForm, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
 
-        btnRegistrar.addActionListener(_ -> registrarUsuario());
-        btnCancelar.addActionListener(_ -> {
+        btnRegistrar.addActionListener(e -> registrarUsuario());
+        btnCancelar.addActionListener(e -> {
             new UsuariosForm().setVisible(true);
             dispose();
 
         });
 
         // Imagen superior centrada
-        JLabel lblIcono = new JLabel(escalarIcono("resources/user.png", 80, 80));
+        JLabel lblIcono = new JLabel(escalarIcono("user.png", 80, 80));
         lblIcono.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblIcono, BorderLayout.NORTH);
 

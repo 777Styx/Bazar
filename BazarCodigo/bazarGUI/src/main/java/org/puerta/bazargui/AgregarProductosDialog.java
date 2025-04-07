@@ -56,7 +56,7 @@ public class AgregarProductosDialog extends JDialog {
         btnAgregar.setBackground(Color.BLACK);
         btnAgregar.setForeground(Color.WHITE);
 
-        btnAgregar.addActionListener(_ -> {
+        btnAgregar.addActionListener(e -> {
             if (obtenerSeleccionados().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Selecciona al menos un producto para continuar.");
                 return;

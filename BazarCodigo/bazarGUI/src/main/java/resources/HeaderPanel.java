@@ -41,7 +41,7 @@ public class HeaderPanel extends JPanel {
     }
 
     private void addBoton(JPanel panel, String icono, SeccionActual seccion, SeccionActual actual, JFrame owner, Class<? extends JFrame> destino) {
-        JLabel label = new JLabel(escalarIcono("resources/" + icono, 40, 40));
+        JLabel label = new JLabel(escalarIcono(icono, 40, 40));
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         if (seccion != actual || seccion == SeccionActual.NINGUNA) {

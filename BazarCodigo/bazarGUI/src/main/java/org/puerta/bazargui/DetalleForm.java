@@ -73,7 +73,7 @@ public class DetalleForm extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // ICONOS
-        ImageIcon iconEditar = escalarIcono("resources/editar.png", 20, 20);
+        ImageIcon iconEditar = escalarIcono("editar.png", 20, 20);
 
         // Cargar los detalles en la tabla
 
@@ -90,7 +90,7 @@ public class DetalleForm extends JFrame {
                         detalle.getCantidad(),
                         detalle.getCanDes(),
                         String.format("$%.2f", importeConDescuento),
-                        escalarIcono("resources/editar.png", 20, 20)
+                        escalarIcono("editar.png", 20, 20)
                 });
 
             }

@@ -58,7 +58,7 @@ public class RegistrarProductoForm extends JFrame {
 
         // BOTÓN AGREGAR FILA
         RoundedButton btnAgregar = new RoundedButton("Registrar producto");
-        btnAgregar.setIcon(escalarIcono("resources/more.png", 20, 20));
+        btnAgregar.setIcon(escalarIcono("more.png", 20, 20));
         btnAgregar.setHorizontalTextPosition(SwingConstants.CENTER);
         btnAgregar.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnAgregar.setPreferredSize(new Dimension(150, 60));
@@ -74,8 +74,8 @@ public class RegistrarProductoForm extends JFrame {
                         "",
                         "",
                         "",
-                        escalarIcono("resources/more.png", 20, 20),
-                        escalarIcono("resources/delete.png", 18, 18)
+                        escalarIcono("more.png", 20, 20),
+                        escalarIcono("delete.png", 18, 18)
                 });
             }
         });
@@ -136,7 +136,7 @@ public class RegistrarProductoForm extends JFrame {
         btnCancelar.setBackground(Color.DARK_GRAY);
         btnCancelar.setForeground(Color.WHITE);
 
-        btnConfirmar.addActionListener(_ -> {
+        btnConfirmar.addActionListener(e -> {
             ProductosBO productosBO = new ProductosBO();
 
             for (int i = 0; i < modelo.getRowCount(); i++) {
@@ -216,7 +216,7 @@ public class RegistrarProductoForm extends JFrame {
             }
 
             // Confirmación
-            ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("resources/check.gif"));
+            ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("check.gif"));
             JLabel mensaje = new JLabel("<html><center>El producto ha sido agregado<br>correctamente</center></html>",
                     SwingConstants.CENTER);
             mensaje.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -259,7 +259,7 @@ public class RegistrarProductoForm extends JFrame {
             }
         });
 
-        btnCancelar.addActionListener(_ -> {
+        btnCancelar.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea cancelar?", "Confirmar",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {

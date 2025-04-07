@@ -66,7 +66,7 @@ public class Login extends JFrame {
         btnAceptar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAceptar.setMaximumSize(new Dimension(120, 35));
         btnAceptar.setMargin(new Insets(10, 10, 10, 10));
-        btnAceptar.addActionListener(_ -> autenticar());
+        btnAceptar.addActionListener(_e -> autenticar());
 
         lblMensajeError = new JLabel(" ");
         lblMensajeError.setForeground(Color.RED);
@@ -91,7 +91,7 @@ public class Login extends JFrame {
         // Panel Derecho con Imagen
         JPanel panelDerecho = new JPanel(new BorderLayout());
         panelDerecho.setBackground(Color.WHITE);
-        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("resources/logo_Bazar.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("logo_Bazar.jpg"));
         Image scaledImage = icon.getImage().getScaledInstance(320, 320, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(scaledImage));
         lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -114,7 +114,7 @@ public class Login extends JFrame {
             lblMensajeError.setText("");
 
             // Crear mensaje personalizado con icono
-            ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("resources/check.gif"));
+            ImageIcon iconoCheck = new ImageIcon(getClass().getClassLoader().getResource("check.gif"));
             JLabel mensaje = new JLabel("<html><center>Bienvenido, <b>" + resultado.getNombre()
                     + "</b><br>Autenticación exitosa</center></html>", SwingConstants.CENTER);
             mensaje.setFont(new Font("SansSerif", Font.PLAIN, 14));

@@ -44,13 +44,13 @@ public class UsuariosForm extends JFrame {
 
         // BOTÓN REGISTRAR
         RoundedButton btnRegistrar = new RoundedButton("Registrar Usuario");
-        btnRegistrar.setIcon(escalarIcono("resources/more.png", 20, 20));
+        btnRegistrar.setIcon(escalarIcono("more.png", 20, 20));
         btnRegistrar.setHorizontalTextPosition(SwingConstants.CENTER);
         btnRegistrar.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnRegistrar.setPreferredSize(new Dimension(150, 60));
         btnRegistrar.setBackground(Color.WHITE);
         btnRegistrar.setForeground(Color.BLACK);
-        btnRegistrar.addActionListener(_ -> {
+        btnRegistrar.addActionListener(e -> {
             new RegistrarUsuarioForm();
             dispose();
         });

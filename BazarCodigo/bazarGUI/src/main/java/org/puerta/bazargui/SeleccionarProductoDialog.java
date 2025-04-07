@@ -44,7 +44,7 @@ public class SeleccionarProductoDialog extends JDialog {
         btnSeleccionar.setBackground(Color.BLACK);
         btnSeleccionar.setForeground(Color.WHITE);
 
-        btnSeleccionar.addActionListener(_ -> {
+        btnSeleccionar.addActionListener(e -> {
             int fila = tabla.getSelectedRow();
             if (fila != -1) {
                 String nombre = modelo.getValueAt(fila, 1).toString();

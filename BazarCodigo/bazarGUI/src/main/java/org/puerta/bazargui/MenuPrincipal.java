@@ -15,13 +15,13 @@ public class MenuPrincipal extends JFrame {
         // HEADER: Botón para volver a Login
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(Color.WHITE);
-        JButton btnDevolver = new JButton(escalarIcono("resources/devolver.png", 60, 60));
+        JButton btnDevolver = new JButton(escalarIcono("devolver.png", 60, 60));
         btnDevolver.setContentAreaFilled(false);
         btnDevolver.setBorderPainted(false);
         header.add(btnDevolver);
         add(header, BorderLayout.NORTH);
 
-        btnDevolver.addActionListener(_ -> {
+        btnDevolver.addActionListener(e -> {
             new Login().setVisible(true);
             dispose();
         });
@@ -31,14 +31,14 @@ public class MenuPrincipal extends JFrame {
         grid.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         grid.setBackground(Color.WHITE);
 
-        grid.add(crearBoton("resources/venta.png", "Venta"));
-        grid.add(crearBoton("resources/inventario.png", "Inventario"));
-        grid.add(crearBoton("resources/proveedores.png", "Proveedores"));
-        grid.add(crearBoton("resources/user.png", "Usuarios"));
-        grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
-        grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
-        grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
-        grid.add(crearBoton("resources/pendiente.png", "Pendiente"));
+        grid.add(crearBoton("venta.png", "Venta"));
+        grid.add(crearBoton("inventario.png", "Inventario"));
+        grid.add(crearBoton("proveedores.png", "Proveedores"));
+        grid.add(crearBoton("user.png", "Usuarios"));
+        grid.add(crearBoton("pendiente.png", "Pendiente"));
+        grid.add(crearBoton("pendiente.png", "Pendiente"));
+        grid.add(crearBoton("pendiente.png", "Pendiente"));
+        grid.add(crearBoton("pendiente.png", "Pendiente"));
 
         add(grid, BorderLayout.CENTER);
         setVisible(true);

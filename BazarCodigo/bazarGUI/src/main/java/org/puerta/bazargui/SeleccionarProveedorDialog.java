@@ -93,9 +93,9 @@ public class SeleccionarProveedorDialog extends JDialog {
         footer.add(btnConfirmar);
         add(footer, BorderLayout.SOUTH);
 
-        btnCancelar.addActionListener(_ -> dispose());
+        btnCancelar.addActionListener(e -> dispose());
 
-        btnConfirmar.addActionListener(_ -> {
+        btnConfirmar.addActionListener(e -> {
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 Boolean seleccionado = (Boolean) modelo.getValueAt(i, 0);
                 if (Boolean.TRUE.equals(seleccionado)) {
